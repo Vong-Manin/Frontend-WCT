@@ -1,4 +1,3 @@
-// app/about/page.jsx
 "use client";
 
 import Image from "next/image";
@@ -176,7 +175,7 @@ export default function AboutPage() {
 
                 <div className="flex flex-wrap gap-3">
                   <a
-                    href="https://github.com/yourprofile"
+                    href="https://github.com/Vong-Manin"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 min-w-[100px] inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium rounded-xl transition-all"
@@ -184,7 +183,7 @@ export default function AboutPage() {
                     <i className="fa-brands fa-github"></i> GitHub
                   </a>
                   <a
-                    href="https://linkedin.com/in/yourprofile"
+                    href="https://linkedin.com/in/Vong Manin"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 min-w-[100px] inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#0A66C2] hover:bg-[#0A66C2]/80 text-white text-sm font-medium rounded-xl transition-all"
@@ -192,7 +191,7 @@ export default function AboutPage() {
                     <i className="fa-brands fa-linkedin-in"></i> LinkedIn
                   </a>
                   <a
-                    href="mailto:your.email@gmail.com"
+                    href="mailto:maninvong6@gmail.com"
                     className="flex-1 min-w-[100px] inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-resortGreen hover:bg-resortGreen-dark text-white text-sm font-medium rounded-xl transition-all"
                   >
                     <i className="fa-regular fa-envelope"></i> Email
@@ -247,7 +246,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Impact Section */}
       <section className="py-20 bg-gradient-to-br from-resortGreen/5 via-white to-amber-50/20 dark:from-resortGreen/10 dark:via-slate-950 dark:to-slate-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -291,7 +289,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="py-16 bg-slate-900 dark:bg-slate-950">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
