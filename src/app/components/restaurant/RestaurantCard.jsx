@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 export default function RestaurantCard({ item }) {
   return (
@@ -42,10 +43,14 @@ export default function RestaurantCard({ item }) {
             <i className="fa-regular fa-clock"></i>
             <span>{item.time}</span>
           </div>
-          <button className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-resortGreen hover:text-resortGreen-dark transition-colors group/btn">
-            <span>Order Now</span>
+          {/* Navigate to reserve page */}
+          <Link
+            href={`/reserve?restaurant=${item.id}&name=${encodeURIComponent(item.title)}`}
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-resortGreen hover:text-resortGreen-dark transition-colors group/btn"
+          >
+            <span>Book Table</span>
             <i className="fa-solid fa-arrow-right text-[10px] transform group-hover/btn:translate-x-1 transition-transform"></i>
-          </button>
+          </Link>
         </div>
       </div>
     </div>

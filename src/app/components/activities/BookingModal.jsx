@@ -8,7 +8,7 @@ export default function BookingModal({ activity, isOpen, onClose, onConfirm }) {
   const [formData, setFormData] = useState({
     name: "",
     date: "",
-    guests: "1",
+    guests: "",
   });
 
   if (!isOpen) return null;
@@ -20,7 +20,7 @@ export default function BookingModal({ activity, isOpen, onClose, onConfirm }) {
       activity: activity.heading,
       price: activity.price,
     });
-    setFormData({ name: "", date: "", guests: "1" });
+    setFormData({ name: "", date: "", guests: "" });
   };
 
   const handleChange = (e) => {
@@ -108,21 +108,19 @@ export default function BookingModal({ activity, isOpen, onClose, onConfirm }) {
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
-                Guests
+                Number of Guests
               </label>
-              <select
+              <input
+                type="number"
                 name="guests"
                 value={formData.guests}
                 onChange={handleChange}
+                min="1"
+                max="50"
+                required
+                placeholder="e.g. 2"
                 className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-2 focus:ring-resortGreen/60 focus:border-resortGreen transition"
-              >
-                <option value="1">1 Person</option>
-                <option value="2">2 People</option>
-                <option value="3">3 People</option>
-                <option value="4">4 People</option>
-                <option value="5">5 People</option>
-                <option value="6">6+ People</option>
-              </select>
+              />
             </div>
           </div>
 

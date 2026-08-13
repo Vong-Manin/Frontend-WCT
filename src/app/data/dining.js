@@ -4,7 +4,12 @@ export const dining = [
     id: 1,
     title: "Premium Breakfast Platter",
     category: "Artisan",
+    price: 24.99,
     time: "6:00 AM - 10:30 AM",
+    operatingHours: {
+      open: "6:00",
+      close: "10:30",
+    },
     description:
       "Start your day right with vibrant, refreshing artisan dishes and beautiful morning selections.",
     image: "/image/breakfast.jpg",
@@ -14,7 +19,12 @@ export const dining = [
     id: 4,
     title: "Tropical Fruit & Yogurt Bowl",
     category: "Artisan",
+    price: 16.99,
     time: "6:00 AM - 10:30 AM",
+    operatingHours: {
+      open: "6:00",
+      close: "10:30",
+    },
     description:
       "A refreshing blend of fresh tropical fruits, creamy yogurt, honey granola, and coconut flakes.",
     image:
@@ -25,7 +35,12 @@ export const dining = [
     id: 5,
     title: "Artisan Omelette Station",
     category: "Artisan",
+    price: 19.99,
     time: "6:00 AM - 10:30 AM",
+    operatingHours: {
+      open: "6:00",
+      close: "10:30",
+    },
     description:
       "Custom-made omelettes with fresh vegetables, premium cheeses, and choice of smoked salmon or ham.",
     image:
@@ -38,7 +53,12 @@ export const dining = [
     id: 2,
     title: "Grilled Lobster Thermidor",
     category: "Signature Seafood",
+    price: 42.99,
     time: "11:00 AM - 11:00 PM",
+    operatingHours: {
+      open: "11:00",
+      close: "23:00",
+    },
     description:
       "Savor modern signature entrees engineered uniquely from fresh, locally harvested coastal seafood.",
     image:
@@ -49,7 +69,12 @@ export const dining = [
     id: 6,
     title: "Pan-Seared Sea Bass",
     category: "Signature Seafood",
+    price: 32.99,
     time: "11:00 AM - 11:00 PM",
+    operatingHours: {
+      open: "11:00",
+      close: "23:00",
+    },
     description:
       "Fresh sea bass with a crispy golden skin, served with lemon butter sauce and seasonal vegetables.",
     image:
@@ -60,7 +85,12 @@ export const dining = [
     id: 7,
     title: "Seafood Paella",
     category: "Signature Seafood",
+    price: 38.99,
     time: "11:00 AM - 11:00 PM",
+    operatingHours: {
+      open: "11:00",
+      close: "23:00",
+    },
     description:
       "Traditional Spanish paella loaded with prawns, mussels, clams, calamari, and saffron-infused rice.",
     image:
@@ -73,7 +103,12 @@ export const dining = [
     id: 3,
     title: "Tropical Sunset Cocktail",
     category: "Crafted",
+    price: 14.99,
     time: "Poolside Drinks",
+    operatingHours: {
+      open: "10:00",
+      close: "23:00",
+    },
     description:
       "Relax by the poolside with custom craft beverages, fine global wines, and curated tropical cocktails.",
     image: "/image/drink.jpg",
@@ -83,7 +118,12 @@ export const dining = [
     id: 8,
     title: "Fresh Coconut Mojito",
     category: "Crafted",
+    price: 12.99,
     time: "Poolside Drinks",
+    operatingHours: {
+      open: "10:00",
+      close: "23:00",
+    },
     description:
       "A refreshing blend of fresh coconut water, mint, lime, and premium white rum served over crushed ice.",
     image:
@@ -94,7 +134,12 @@ export const dining = [
     id: 9,
     title: "Tropical Smoothie Bowl",
     category: "Crafted",
+    price: 11.99,
     time: "Poolside Drinks",
+    operatingHours: {
+      open: "10:00",
+      close: "23:00",
+    },
     description:
       "A vibrant smoothie bowl packed with mango, passion fruit, banana, and topped with fresh berries and granola.",
     image:
