@@ -89,7 +89,7 @@ export default function RoomSearch({
       setLocalCheckIn(formatDate(today));
       setLocalCheckOut(formatDate(tomorrow));
     }
-  }, []);
+  }, [localCheckIn, localCheckOut]);
 
   return (
     <form

@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "activity_bookings",
+  "info": {
+    "singularName": "activity-booking",
+    "pluralName": "activity-bookings",
+    "displayName": "Activity Booking"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "bookingReference": { "type": "string", "required": true, "unique": true },
+    "customerName": { "type": "string", "required": true },
+    "email": { "type": "email", "required": true },
+    "phone": { "type": "string" },
+    "bookingDate": { "type": "date", "required": true },
+    "bookingTime": { "type": "string" },
+    "numberOfPeople": { "type": "integer", "required": true, "min": 1, "max": 50 },
+    "totalPrice": { "type": "decimal", "required": true, "min": 0 },
+    "specialRequest": { "type": "text" },
+    "bookingStatus": {
+      "type": "enumeration",
+      "enum": ["pending", "confirmed", "cancelled"],
+      "default": "confirmed",
+      "required": true
+    },
+    "activity": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::activity.activity",
+      "inversedBy": "bookings"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::site-user.site-user",
+      "inversedBy": "activityBookings"
+    }
+  }
+}

@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { dining } from "@/app/data/dining";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
 
 export default function Dining() {
+  const { dining } = useResortContent();
   // Get only first 3 dining items
   const featuredDining = dining.slice(0, 3);
 

@@ -1,10 +1,8 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
-
-const inter = Inter({ subsets: ["latin"] });
+import { ResortContentProvider } from "@/app/components/providers/ResortContentProvider";
 
 export const metadata = {
   title: "Khyal Samut Resort",
@@ -22,11 +20,13 @@ export default function RootLayout({ children }) {
           />
         </head>
         <body
-          className={`${inter.className} bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased selection:bg-resortGreen selection:text-white transition-colors duration-300`}
+          className="font-sans overflow-x-hidden bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 antialiased selection:bg-resortGreen selection:text-white transition-colors duration-300"
         >
-          <Header />
-          <main>{children}</main>
-          <Footer />
+          <ResortContentProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </ResortContentProvider>
         </body>
       </html>
     </ClerkProvider>

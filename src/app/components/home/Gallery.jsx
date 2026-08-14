@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { gallery } from "@/app/data/gallery";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
 
 export default function Gallery() {
+  const { gallery } = useResortContent();
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
       {/* Header */}

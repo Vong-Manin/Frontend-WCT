@@ -1,28 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { rooms } from "@/app/data/rooms";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
 import RoomGallery from "@/app/components/detail-room/RoomGallery";
 import RoomInfo from "@/app/components/detail-room/RoomInfo";
 import CheckInCheckOut from "@/app/components/detail-room/CheckIn-CheckOut";
 import RoomReviews from "@/app/components/detail-room/RoomReviews";
 
 export default function RoomDetailPage() {
+  const { rooms, isLoading } = useResortContent();
   const params = useParams();
   const id = params.id;
-  const [room, setRoom] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (id) {
-      const foundRoom = rooms.find((r) => r.id === parseInt(id));
-      setRoom(foundRoom || null);
-      setLoading(false);
-    }
-  }, [id]);
+  const room = id ? rooms.find((candidate) => candidate.id === Number(id)) : null;
+  const loading = isLoading;
 
   if (loading) {
     return (

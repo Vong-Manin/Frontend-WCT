@@ -4,7 +4,14 @@
 import { useState } from "react";
 import Image from "next/image";
 
-export default function BookingModal({ activity, isOpen, onClose, onConfirm }) {
+export default function BookingModal({
+  activity,
+  isOpen,
+  onClose,
+  onConfirm,
+  isSubmitting = false,
+  error = "",
+}) {
   const [formData, setFormData] = useState({
     name: "",
     date: "",
@@ -13,14 +20,18 @@ export default function BookingModal({ activity, isOpen, onClose, onConfirm }) {
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onConfirm({
-      ...formData,
-      activity: activity.heading,
-      price: activity.price,
-    });
-    setFormData({ name: "", date: "", guests: "" });
+    try {
+      await onConfirm({
+        ...formData,
+        activity: activity.heading,
+        price: activity.price,
+      });
+      setFormData({ name: "", date: "", guests: "" });
+    } catch {
+      // The parent renders the API message inside the existing modal.
+    }
   };
 
   const handleChange = (e) => {
@@ -124,11 +135,18 @@ export default function BookingModal({ activity, isOpen, onClose, onConfirm }) {
             </div>
           </div>
 
+          {error && (
+            <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700 dark:border-rose-800 dark:bg-rose-950/30 dark:text-rose-300">
+              {error}
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full bg-resortGreen hover:bg-resortGreen/90 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-resortGreen/30 transition-all text-sm"
+            disabled={isSubmitting}
+            className="w-full bg-resortGreen hover:bg-resortGreen/90 disabled:cursor-not-allowed disabled:opacity-60 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-resortGreen/30 transition-all text-sm"
           >
-            Confirm Reservation
+            {isSubmitting ? "Confirming…" : "Confirm Reservation"}
           </button>
 
           <p className="text-center text-[10px] text-slate-400">

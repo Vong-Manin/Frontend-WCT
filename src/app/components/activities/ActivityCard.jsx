@@ -53,7 +53,7 @@ export default function ActivityCard({
   };
 
   // Safe fallback values
-  const imageUrl = activity.image || "/images/placeholder.jpg";
+  const imageUrl = activity.image || "/image/placeholder.jpg";
   const heading = activity.heading || "Activity";
   const title = activity.title || "Experience";
   const description = activity.description || "No description available.";
@@ -83,7 +83,7 @@ export default function ActivityCard({
           }`}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           onError={(e) => {
-            e.currentTarget.src = "/images/placeholder.jpg";
+            e.currentTarget.src = "/image/placeholder.jpg";
           }}
         />
 

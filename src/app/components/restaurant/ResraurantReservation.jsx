@@ -1,8 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { createTableBooking } from "@/lib/services/bookings";
 
 export default function RestaurantReservation() {
+  const router = useRouter();
+  const { getToken } = useAuth();
+  const { isLoaded, isSignedIn, user } = useUser();
   // Pre-defined time slots from 6:00 AM to 10:00 PM
   const timeSlots = [
     "6:00 AM",
@@ -46,6 +52,7 @@ export default function RestaurantReservation() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     date: "",
     time: "",
     guests: "2 Guests",
@@ -53,6 +60,19 @@ export default function RestaurantReservation() {
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reservationError, setReservationError] = useState("");
+  const [bookingReference, setBookingReference] = useState("");
+
+  useEffect(() => {
+    if (!user) return;
+    setFormData((current) => ({
+      ...current,
+      name: user.fullName || user.firstName || current.name,
+      email: user.primaryEmailAddress?.emailAddress || current.email,
+      phone: user.primaryPhoneNumber?.phoneNumber || current.phone,
+    }));
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,11 +82,35 @@ export default function RestaurantReservation() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Reservation submitted:", formData);
-    setIsSubmitted(true);
-    // Add API call here to save reservation
+    if (!isLoaded || !isSignedIn) {
+      router.push(`/sign-in?redirect_url=${encodeURIComponent("/restaurant")}`);
+      return;
+    }
+    setIsSubmitting(true);
+    setReservationError("");
+    try {
+      const token = await getToken();
+      const booking = await createTableBooking(
+        {
+          customerName: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          bookingDate: formData.date,
+          bookingTime: formData.time,
+          numberOfGuests: Number.parseInt(formData.guests, 10),
+          specialRequest: formData.specialRequests,
+        },
+        token,
+      );
+      setBookingReference(booking.bookingReference);
+      setIsSubmitted(true);
+    } catch (error) {
+      setReservationError(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
@@ -95,6 +139,9 @@ export default function RestaurantReservation() {
             <p className="text-sm text-slate-600 dark:text-slate-300">
               <strong>Guests:</strong> {formData.guests}
             </p>
+            <p className="text-sm text-slate-600 dark:text-slate-300">
+              <strong>Reference:</strong> {bookingReference}
+            </p>
           </div>
           <button
             onClick={() => {
@@ -102,6 +149,7 @@ export default function RestaurantReservation() {
               setFormData({
                 name: "",
                 email: "",
+                phone: "",
                 date: "",
                 time: "",
                 guests: "2 Guests",
@@ -167,6 +215,21 @@ export default function RestaurantReservation() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                <i className="fa-solid fa-phone mr-1 text-resortGreen"></i>{" "}
+                Phone *
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                required
+                placeholder="+855 12 345 678"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 px-4 py-3 text-sm focus:ring-2 focus:ring-resortGreen/60 focus:border-resortGreen transition"
+              />
+            </div>
             <div>
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
                 <i className="fa-regular fa-calendar mr-1 text-resortGreen"></i>{" "}
@@ -244,12 +307,19 @@ export default function RestaurantReservation() {
             ></textarea>
           </div>
 
+          {reservationError && (
+            <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700 dark:border-rose-800 dark:bg-rose-950/30 dark:text-rose-300">
+              {reservationError}
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full bg-resortGreen hover:bg-resortGreen-dark text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg hover:shadow-resortGreen/30 flex items-center justify-center gap-2 text-sm tracking-wide"
+            disabled={isSubmitting}
+            className="w-full bg-resortGreen hover:bg-resortGreen-dark disabled:cursor-not-allowed disabled:opacity-60 text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-lg hover:shadow-resortGreen/30 flex items-center justify-center gap-2 text-sm tracking-wide"
           >
             <i className="fa-regular fa-calendar-check"></i>
-            <span>Reserve Table</span>
+            <span>{isSubmitting ? "Reserving…" : "Reserve Table"}</span>
           </button>
 
           <p className="text-center text-xs text-slate-400 dark:text-slate-500">

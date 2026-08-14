@@ -1,12 +1,18 @@
 // app/reserve/page.jsx
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useState, useMemo } from "react";
-import { dining } from "@/app/data/dining";
+import { Suspense, useEffect, useState, useMemo } from "react";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
+import { useAuth, useUser } from "@clerk/nextjs";
+import { createTableBooking } from "@/lib/services/bookings";
 
-export default function ReservePage() {
+function ReservePageContent() {
+  const { dining } = useResortContent();
+  const router = useRouter();
+  const { getToken } = useAuth();
+  const { isLoaded, isSignedIn, user } = useUser();
   const searchParams = useSearchParams();
   const restaurantId = searchParams.get("restaurant");
   const restaurantName = searchParams.get("name") || "Restaurant";
@@ -109,6 +115,19 @@ export default function ReservePage() {
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reservationError, setReservationError] = useState("");
+  const [bookingReference, setBookingReference] = useState("");
+
+  useEffect(() => {
+    if (!user) return;
+    setFormData((current) => ({
+      ...current,
+      name: user.fullName || user.firstName || current.name,
+      email: user.primaryEmailAddress?.emailAddress || current.email,
+      phone: user.primaryPhoneNumber?.phoneNumber || current.phone,
+    }));
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -118,14 +137,42 @@ export default function ReservePage() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Reservation submitted:", {
-      restaurant: restaurantName,
-      ...formData,
-    });
-    setIsSubmitted(true);
-    // You can add API call here to save the reservation
+    if (!isLoaded || !isSignedIn) {
+      router.push(`/sign-in?redirect_url=${encodeURIComponent(window.location.href)}`);
+      return;
+    }
+    setIsSubmitting(true);
+    setReservationError("");
+    try {
+      const token = await getToken();
+      const booking = await createTableBooking(
+        {
+          customerName: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          bookingDate: formData.date,
+          bookingTime: formData.time,
+          numberOfGuests: Number(formData.guests),
+          specialRequest: formData.specialRequests,
+          ...(restaurant
+            ? {
+                menuItem: restaurant.documentId
+                  ? { documentId: restaurant.documentId }
+                  : { legacyId: restaurant.id },
+              }
+            : {}),
+        },
+        token,
+      );
+      setBookingReference(booking.bookingReference);
+      setIsSubmitted(true);
+    } catch (error) {
+      setReservationError(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleBookMore = () => {
@@ -171,6 +218,9 @@ export default function ReservePage() {
             </p>
             <p className="text-sm text-slate-600 dark:text-slate-300">
               <strong>Guests:</strong> {formData.guests}
+            </p>
+            <p className="text-sm text-slate-600 dark:text-slate-300">
+              <strong>Reference:</strong> {bookingReference}
             </p>
           </div>
 
@@ -347,10 +397,17 @@ export default function ReservePage() {
 
             <button
               type="submit"
-              className="w-full py-3 bg-resortGreen hover:bg-resortGreen-dark text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-resortGreen/30"
+              disabled={isSubmitting}
+              className="w-full py-3 bg-resortGreen hover:bg-resortGreen-dark disabled:cursor-not-allowed disabled:opacity-60 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-resortGreen/30"
             >
-              Reserve Table
+              {isSubmitting ? "Reserving…" : "Reserve Table"}
             </button>
+
+            {reservationError && (
+              <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700 dark:border-rose-800 dark:bg-rose-950/30 dark:text-rose-300">
+                {reservationError}
+              </div>
+            )}
 
             <Link
               href="/"
@@ -362,5 +419,19 @@ export default function ReservePage() {
         </div>
       </div>
     </section>
+  );
+}
+
+export default function ReservePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+          <div className="w-12 h-12 border-4 border-resortGreen/20 border-t-resortGreen rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <ReservePageContent />
+    </Suspense>
   );
 }

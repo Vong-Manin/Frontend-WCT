@@ -2,12 +2,21 @@
 
 import { useState, useEffect } from "react";
 
-export default function ReviewDrawer({ isOpen, onClose, onAddReview }) {
-  const [rating, setRating] = useState(0);
-  const [name, setName] = useState("");
-  const [date, setDate] = useState("");
-  const [comment, setComment] = useState("");
-  const [roomType, setRoomType] = useState("");
+export default function ReviewDrawer({
+  isOpen,
+  onClose,
+  onAddReview,
+  review = null,
+  currentUserName = "",
+  rooms = [],
+  isSubmitting = false,
+  error = "",
+}) {
+  const [rating, setRating] = useState(review?.rating || 0);
+  const [name, setName] = useState(review?.name || currentUserName);
+  const [date, setDate] = useState(review?.stayDate?.slice(0, 10) || "");
+  const [comment, setComment] = useState(review?.comment || "");
+  const [roomType, setRoomType] = useState(review?.roomType || "");
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
@@ -21,27 +30,24 @@ export default function ReviewDrawer({ isOpen, onClose, onAddReview }) {
     };
   }, [isOpen]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (rating === 0 || !name || !date || !comment) return;
 
-    const formatDate = (dateStr) => {
-      if (!dateStr) return "";
-      const d = new Date(dateStr);
-      return d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-    };
-
     const newReview = {
       name,
-      date: formatDate(date),
+      stayDate: date,
       rating,
       comment,
       roomType: roomType || "Not specified",
-      verified: false,
     };
 
-    onAddReview(newReview);
-    setShowSuccess(true);
+    try {
+      await onAddReview(newReview);
+      setShowSuccess(true);
+    } catch {
+      return;
+    }
 
     setTimeout(() => {
       setShowSuccess(false);
@@ -125,7 +131,7 @@ export default function ReviewDrawer({ isOpen, onClose, onAddReview }) {
             <input
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              readOnly
               placeholder="Your Full Name"
               className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:border-resortGreen focus:ring-2 focus:ring-resortGreen/20 transition-all"
               required
@@ -161,12 +167,11 @@ export default function ReviewDrawer({ isOpen, onClose, onAddReview }) {
                 className="w-full px-4 py-3 pl-10 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:border-resortGreen focus:ring-2 focus:ring-resortGreen/20 transition-all appearance-none cursor-pointer"
               >
                 <option value="">Select a room type</option>
-                <option value="Ocean View Suite">Ocean View Suite</option>
-                <option value="Private Garden Villa">
-                  Private Garden Villa
-                </option>
-                <option value="Family Suite">Family Suite</option>
-                <option value="Deluxe Room">Luxury Room</option>
+                {rooms.map((room) => (
+                  <option key={room.documentId || room.id} value={room.title}>
+                    {room.title}
+                  </option>
+                ))}
               </select>
               <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
                 <i className="fa-solid fa-chevron-down text-xs"></i>
@@ -190,11 +195,17 @@ export default function ReviewDrawer({ isOpen, onClose, onAddReview }) {
           </div>
 
           {/* Submit Button */}
+          {error && (
+            <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700 dark:border-rose-800 dark:bg-rose-950/30 dark:text-rose-300">
+              {error}
+            </div>
+          )}
           <button
             type="submit"
-            className="w-full bg-resortGreen hover:bg-resortGreen-dark text-white font-bold py-4 px-4 rounded-xl transition-all cursor-pointer text-[10px] uppercase tracking-widest shadow-lg hover:shadow-2xl hover:shadow-resortGreen/30 transform hover:-translate-y-0.5 active:scale-95"
+            disabled={isSubmitting}
+            className="w-full bg-resortGreen hover:bg-resortGreen-dark disabled:cursor-not-allowed disabled:opacity-60 text-white font-bold py-4 px-4 rounded-xl transition-all cursor-pointer text-[10px] uppercase tracking-widest shadow-lg hover:shadow-2xl hover:shadow-resortGreen/30 transform hover:-translate-y-0.5 active:scale-95"
           >
-            Publish Review
+            {isSubmitting ? "Saving…" : review ? "Update Review" : "Publish Review"}
           </button>
         </form>
       </div>

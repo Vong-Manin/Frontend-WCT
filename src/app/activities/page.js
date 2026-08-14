@@ -1,41 +1,42 @@
 // src/app/activities/page.js
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  activities,
-  categories,
-  getActivitiesByCategory,
-} from "@/app/data/activities";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
 import ActivityCard from "@/app/components/activities/ActivityCard";
 import FilterButtons from "@/app/components/activities/FilterButtons";
 import BookingModal from "@/app/components/activities/BookingModal";
 import SuccessToast from "@/app/components/activities/SuccessToast";
+import { useAuth, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { createActivityBooking } from "@/lib/services/bookings";
+
+const categories = [
+  { id: "all", label: "All Experiences" },
+  { id: "wellness", label: "Wellness & Spa" },
+  { id: "adventure", label: "Water Adventure" },
+  { id: "cruise", label: "Island Cruise" },
+];
 
 export default function ActivitiesPage() {
+  const router = useRouter();
+  const { getToken } = useAuth();
+  const { isSignedIn, user } = useUser();
+  const { activities, isLoading } = useResortContent();
   // ALL STATE DECLARATIONS MUST BE HERE
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
-  const [filteredActivities, setFilteredActivities] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [bookingError, setBookingError] = useState("");
+  const [isBooking, setIsBooking] = useState(false);
 
-  // Filter activities when filter changes
-  useEffect(() => {
-    try {
-      setIsLoading(true);
-      const result = getActivitiesByCategory(selectedFilter);
-      setFilteredActivities(Array.isArray(result) ? result : []);
-    } catch (error) {
-      console.error("Error filtering activities:", error);
-      setFilteredActivities([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [selectedFilter]);
+  const filteredActivities =
+    selectedFilter === "all"
+      ? activities
+      : activities.filter((activity) => activity.category === selectedFilter);
 
   const handleFilterChange = (filterId) => {
     setSelectedFilter(filterId);
@@ -43,19 +44,46 @@ export default function ActivitiesPage() {
 
   const handleBookClick = (activity) => {
     if (activity) {
+      if (!isSignedIn) {
+        router.push(`/sign-in?redirect_url=${encodeURIComponent("/activities")}`);
+        return;
+      }
       setSelectedActivity(activity);
+      setBookingError("");
       setIsModalOpen(true);
     }
   };
 
-  const handleModalConfirm = (bookingData) => {
-    setIsModalOpen(false);
-    setToastMessage(
-      `Your booking for "${bookingData.activity}" with ${bookingData.guests} guest(s) on ${bookingData.date} has been confirmed!`,
-    );
-    setTimeout(() => {
-      setToastMessage(null);
-    }, 5000);
+  const handleModalConfirm = async (bookingData) => {
+    setIsBooking(true);
+    setBookingError("");
+    try {
+      const token = await getToken();
+      const email = user?.primaryEmailAddress?.emailAddress;
+      if (!email) throw new Error("Your account needs an email address to book an activity.");
+      await createActivityBooking(
+        {
+          customerName: bookingData.name,
+          email,
+          bookingDate: bookingData.date,
+          numberOfPeople: Number(bookingData.guests),
+          activity: selectedActivity.documentId
+            ? { documentId: selectedActivity.documentId }
+            : { legacyId: selectedActivity.id },
+        },
+        token,
+      );
+      setIsModalOpen(false);
+      setToastMessage(
+        `Your booking for "${bookingData.activity}" with ${bookingData.guests} guest(s) on ${bookingData.date} has been confirmed!`,
+      );
+      setTimeout(() => setToastMessage(null), 5000);
+    } catch (error) {
+      setBookingError(error.message);
+      throw error;
+    } finally {
+      setIsBooking(false);
+    }
   };
 
   const handleToastClose = () => {
@@ -357,6 +385,8 @@ export default function ActivitiesPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleModalConfirm}
+        isSubmitting={isBooking}
+        error={bookingError}
       />
 
       {toastMessage && (

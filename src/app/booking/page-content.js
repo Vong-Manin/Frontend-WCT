@@ -4,37 +4,52 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useUser, useAuth } from "@clerk/nextjs";
-import { rooms } from "@/app/data/rooms";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
 import BookingHeader from "@/app/components/booking/BookingHeader";
 import BookingProgress from "@/app/components/booking/BookingProgress";
 import BookingRoom from "@/app/components/booking/BookingRoom";
 import BookingGuestDetail from "@/app/components/booking/BookingGuestDetail";
 import BookingSuccess from "@/app/components/booking/BookingSuccess";
 import BookingSummary from "@/app/components/booking/BookingSummary";
+import { createRoomBooking } from "@/lib/services/bookings";
+
+function formatLocalDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 
 export default function BookingPage() {
+  const { rooms, isLoading: contentLoading } = useResortContent();
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialRoomId = searchParams.get("room");
   const { isLoaded, isSignedIn, user } = useUser();
-  const { signOut } = useAuth();
+  const { getToken } = useAuth();
   const countdownRef = useRef(null);
 
-  const [loading, setLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingError, setBookingError] = useState("");
   const [bookingReference, setBookingReference] = useState("");
   const [countdown, setCountdown] = useState(10);
-  const [availableRooms, setAvailableRooms] = useState([]);
+  const availableRooms = rooms;
 
   // Cart: Array of selected rooms with quantities
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    const foundRoom = rooms.find((room) => room.id === Number(initialRoomId));
+    return foundRoom
+      ? [{ roomId: foundRoom.id, room: foundRoom, quantity: 1, guests: 1 }]
+      : [];
+  });
 
   // Booking dates (shared across all rooms)
-  const [bookingData, setBookingData] = useState({
-    checkIn: "",
-    checkOut: "",
+  const [bookingData, setBookingData] = useState(() => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return { checkIn: formatLocalDate(today), checkOut: formatLocalDate(tomorrow) };
   });
 
   // Guest details form data - Auto-filled with Clerk user data
@@ -55,74 +70,12 @@ export default function BookingPage() {
     }
   }, [isLoaded, isSignedIn, router, initialRoomId]);
 
-  // Auto-fill guest data when user loads
-  useEffect(() => {
-    if (user) {
-      setGuestData((prev) => ({
-        ...prev,
-        fullName: user.fullName || user.firstName || prev.fullName,
-        email: user.emailAddresses?.[0]?.emailAddress || prev.email,
-        phone: user.phoneNumbers?.[0]?.phoneNumber || prev.phone,
-      }));
-    }
-  }, [user]);
-
-  // Load room data
-  useEffect(() => {
-    setAvailableRooms(rooms);
-
-    if (initialRoomId) {
-      const foundRoom = rooms.find((r) => r.id === parseInt(initialRoomId));
-      if (foundRoom) {
-        setCart([
-          {
-            roomId: foundRoom.id,
-            room: foundRoom,
-            quantity: 1,
-            guests: 1,
-          },
-        ]);
-      }
-      setLoading(false);
-    } else {
-      setLoading(false);
-    }
-  }, [initialRoomId]);
-
-  // Auto-set dates on mount
-  useEffect(() => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    const formatDate = (date) => {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
-    };
-
-    if (!bookingData.checkIn && !bookingData.checkOut) {
-      setBookingData({
-        checkIn: formatDate(today),
-        checkOut: formatDate(tomorrow),
-      });
-    }
-  }, []);
-
-  // If not authenticated or still loading, show loading state
-  if (!isLoaded || !isSignedIn) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-resortGreen/20 border-t-resortGreen rounded-full animate-spin mx-auto"></div>
-          <p className="text-slate-500 dark:text-slate-400 mt-4">
-            {!isLoaded ? "Loading..." : "Redirecting to sign in..."}
-          </p>
-        </div>
-      </div>
-    );
-  }
+  const effectiveGuestData = {
+    ...guestData,
+    fullName: guestData.fullName || user?.fullName || user?.firstName || "",
+    email: guestData.email || user?.emailAddresses?.[0]?.emailAddress || "",
+    phone: guestData.phone || user?.phoneNumbers?.[0]?.phoneNumber || "",
+  };
 
   // Calculate nights
   const calculateNights = () => {
@@ -238,23 +191,44 @@ export default function BookingPage() {
   };
 
   // Handle booking submission
-  const handleSubmitBooking = () => {
+  const handleSubmitBooking = async () => {
     setIsSubmitting(true);
     setBookingError("");
 
-    if (!guestData.fullName || !guestData.email || !guestData.phone) {
+    if (!effectiveGuestData.fullName || !effectiveGuestData.email || !effectiveGuestData.phone) {
       setBookingError("Please fill in all required fields");
       setIsSubmitting(false);
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      const ref = `KSR-${String(Math.floor(Math.random() * 100000)).padStart(5, "0")}`;
-      setBookingReference(ref);
+    try {
+      const token = await getToken();
+      const booking = await createRoomBooking(
+        {
+          customerName: effectiveGuestData.fullName,
+          email: effectiveGuestData.email,
+          phone: effectiveGuestData.phone,
+          checkInDate: bookingData.checkIn,
+          checkOutDate: bookingData.checkOut,
+          specialRequest: guestData.specialRequests,
+          paymentMethod: guestData.paymentMethod,
+          rooms: cart.map((item) => ({
+            ...(item.room.documentId
+              ? { documentId: item.room.documentId }
+              : { legacyId: item.room.id }),
+            quantity: item.quantity,
+            guests: item.guests,
+          })),
+        },
+        token,
+      );
+      setBookingReference(booking.bookingReference);
       setCurrentStep(3);
+    } catch (error) {
+      setBookingError(error.message);
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
 
   // Countdown timer for success page
@@ -283,10 +257,23 @@ export default function BookingPage() {
         }
       };
     }
-  }, [currentStep, router]);
+  }, [currentStep, countdown, router]);
+
+  if (!isLoaded || !isSignedIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-resortGreen/20 border-t-resortGreen rounded-full animate-spin mx-auto"></div>
+          <p className="text-slate-500 dark:text-slate-400 mt-4">
+            {!isLoaded ? "Loading..." : "Redirecting to sign in..."}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Loading state
-  if (loading) {
+  if (contentLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <div className="text-center">
@@ -333,7 +320,7 @@ export default function BookingPage() {
 
             {currentStep === 2 && (
               <BookingGuestDetail
-                formData={guestData}
+                formData={effectiveGuestData}
                 onFormChange={handleGuestChange}
                 onBack={goToPreviousStep}
                 onSubmit={handleSubmitBooking}
@@ -344,9 +331,9 @@ export default function BookingPage() {
 
             {currentStep === 3 && (
               <BookingSuccess
-                email={guestData.email}
+                email={effectiveGuestData.email}
                 bookingReference={bookingReference}
-                guestName={guestData.fullName}
+                guestName={effectiveGuestData.fullName}
                 roomTitle={
                   cart.length === 1
                     ? cart[0].room.title

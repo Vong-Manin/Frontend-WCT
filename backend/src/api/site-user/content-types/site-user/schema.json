@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "site_users",
+  "info": {
+    "singularName": "site-user",
+    "pluralName": "site-users",
+    "displayName": "Site User",
+    "description": "A Strapi-side profile linked to the existing Clerk identity"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "clerkUserId": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "private": true
+    },
+    "email": { "type": "email", "private": true },
+    "displayName": { "type": "string", "required": true },
+    "avatarUrl": { "type": "string" },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "user"
+    },
+    "roomBookings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::room-booking.room-booking",
+      "mappedBy": "user"
+    },
+    "tableBookings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::table-booking.table-booking",
+      "mappedBy": "user"
+    },
+    "activityBookings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::activity-booking.activity-booking",
+      "mappedBy": "user"
+    }
+  }
+}

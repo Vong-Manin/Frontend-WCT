@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import RoomHero from "@/app/components/room/RoomHero";
 import RoomGrid from "@/app/components/room/RoomGrid";
 import RoomCategories from "@/app/components/room/RoomCategories";
-import { rooms } from "@/app/data/rooms";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
 
 export default function RoomsPage() {
-  const [filteredRooms, setFilteredRooms] = useState(rooms);
+  const { rooms } = useResortContent();
   const [visibleRooms, setVisibleRooms] = useState(6);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [filters, setFilters] = useState({
@@ -27,8 +27,7 @@ export default function RoomsPage() {
     { id: "luxury", label: "Luxury", icon: "fa-solid fa-gem" },
   ];
 
-  // Filter rooms based on all criteria
-  const applyFilters = () => {
+  const filteredRooms = useMemo(() => {
     let filtered = rooms;
 
     // Filter by category
@@ -45,17 +44,12 @@ export default function RoomsPage() {
     // Filter by guests
     filtered = filtered.filter((room) => room.maxGuests >= filters.guests);
 
-    setFilteredRooms(filtered);
-    setVisibleRooms(6);
-  };
-
-  // Apply filters whenever they change
-  useEffect(() => {
-    applyFilters();
-  }, [filters, selectedCategory]);
+    return filtered;
+  }, [rooms, selectedCategory, filters]);
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
+    setVisibleRooms(6);
   };
 
   const handleClearFilters = () => {
@@ -65,6 +59,7 @@ export default function RoomsPage() {
       rooms: 1,
     });
     setSelectedCategory("all");
+    setVisibleRooms(6);
   };
 
   const handleLoadMore = () => {

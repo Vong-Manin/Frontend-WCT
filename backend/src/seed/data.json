@@ -1,0 +1,926 @@
+{
+  "rooms": [
+    {
+      "id": 1,
+      "title": "Ocean View Suite",
+      "price": 360,
+      "category": "suite",
+      "priceTier": "moderate",
+      "popular": true,
+      "images": [
+        "/image/suiteOcean.jpg",
+        "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800",
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800"
+      ],
+      "description": "Experience ultimate sanctuary featuring premium bedding, panoramic private views, and smart home automation systems.",
+      "amenities": [
+        "Free Wi-Fi",
+        "Smart TV",
+        "Air Conditioning",
+        "Mini Bar",
+        "Room Service",
+        "Ocean View",
+        "Private Balcony",
+        "Rain Shower"
+      ],
+      "size": "45 m²",
+      "bedType": "1 King Bed",
+      "maxGuests": 2,
+      "rating": 4.9,
+      "ratingLabel": "Exceptional",
+      "reviews": 148,
+      "viewType": "Ocean View",
+      "viewIcon": "fa-solid fa-water",
+      "viewIconColor": "sky",
+      "stars": 5,
+      "amenitiesData": [
+        "breakfast",
+        "wifi"
+      ],
+      "features": [
+        "Ocean View",
+        "Private Balcony",
+        "Smart TV"
+      ],
+      "breakfastIncluded": true,
+      "poolAccess": false
+    },
+    {
+      "id": 4,
+      "title": "Sunset Sky Suite",
+      "price": 450,
+      "category": "suite",
+      "priceTier": "moderate",
+      "popular": false,
+      "images": [
+        "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800",
+        "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800"
+      ],
+      "description": "Watch the sunset from your private balcony in this elegant suite with panoramic ocean views.",
+      "amenities": [
+        "Free Wi-Fi",
+        "Smart TV",
+        "Air Conditioning",
+        "Mini Bar",
+        "Room Service",
+        "Sunset View",
+        "Private Balcony",
+        "Rain Shower"
+      ],
+      "size": "50 m²",
+      "bedType": "1 King Bed",
+      "maxGuests": 2,
+      "rating": 4.8,
+      "ratingLabel": "Excellent",
+      "reviews": 96,
+      "viewType": "Sunset View",
+      "viewIcon": "fa-solid fa-sun",
+      "viewIconColor": "orange",
+      "stars": 5,
+      "amenitiesData": [
+        "breakfast",
+        "wifi"
+      ],
+      "features": [
+        "Sunset View",
+        "Private Balcony",
+        "Smart TV"
+      ],
+      "breakfastIncluded": true,
+      "poolAccess": false
+    },
+    {
+      "id": 5,
+      "title": "Executive Business Suite",
+      "price": 120,
+      "category": "suite",
+      "priceTier": "moderate",
+      "popular": false,
+      "images": [
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800",
+        "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800",
+        "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800"
+      ],
+      "description": "Designed for business travelers, this suite features a dedicated workspace and premium executive amenities.",
+      "amenities": [
+        "Free Wi-Fi",
+        "Smart TV",
+        "Air Conditioning",
+        "Mini Bar",
+        "Room Service",
+        "City View",
+        "Workspace",
+        "Express Check-in"
+      ],
+      "size": "40 m²",
+      "bedType": "1 Queen Bed",
+      "maxGuests": 2,
+      "rating": 4.7,
+      "ratingLabel": "Excellent",
+      "reviews": 82,
+      "viewType": "City View",
+      "viewIcon": "fa-solid fa-city",
+      "viewIconColor": "blue",
+      "stars": 4,
+      "amenitiesData": [
+        "breakfast",
+        "wifi"
+      ],
+      "features": [
+        "Workspace",
+        "City View",
+        "Express Check-in"
+      ],
+      "breakfastIncluded": true,
+      "poolAccess": false
+    },
+    {
+      "id": 2,
+      "title": "Private Garden Villa",
+      "price": 699,
+      "category": "villa",
+      "priceTier": "luxury",
+      "popular": false,
+      "images": [
+        "/image/gardenVilla.jpg",
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800"
+      ],
+      "description": "A private sanctuary surrounded by lush tropical gardens with your own plunge pool and outdoor shower.",
+      "amenities": [
+        "Private Pool",
+        "Free Wi-Fi",
+        "Smart TV",
+        "Air Conditioning",
+        "Mini Bar",
+        "Room Service",
+        "Garden View",
+        "Outdoor Shower"
+      ],
+      "size": "85 m²",
+      "bedType": "1 Extra King Bed",
+      "maxGuests": 2,
+      "rating": 4.9,
+      "ratingLabel": "Exceptional",
+      "reviews": 72,
+      "viewType": "Garden View",
+      "viewIcon": "fa-solid fa-tree",
+      "viewIconColor": "emerald",
+      "stars": 5,
+      "amenitiesData": [
+        "breakfast",
+        "pool",
+        "wifi"
+      ],
+      "features": [
+        "Private Pool",
+        "Garden View",
+        "Outdoor Shower"
+      ],
+      "breakfastIncluded": true,
+      "poolAccess": true
+    },
+    {
+      "id": 6,
+      "title": "Tropical Oasis Villa",
+      "price": 450,
+      "category": "villa",
+      "priceTier": "luxury",
+      "popular": true,
+      "images": [
+        "/image/OasisVillaTropicale.jpg",
+        "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800",
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800"
+      ],
+      "description": "Immerse yourself in tropical luxury with this stunning villa featuring a private pool and outdoor living space.",
+      "amenities": [
+        "Private Pool",
+        "Free Wi-Fi",
+        "Smart TV",
+        "Air Conditioning",
+        "Mini Bar",
+        "Room Service",
+        "Tropical Garden",
+        "Outdoor Dining"
+      ],
+      "size": "90 m²",
+      "bedType": "1 King Bed",
+      "maxGuests": 2,
+      "rating": 4.9,
+      "ratingLabel": "Exceptional",
+      "reviews": 64,
+      "viewType": "Tropical Garden",
+      "viewIcon": "fa-solid fa-palm-tree",
+      "viewIconColor": "emerald",
+      "stars": 5,
+      "amenitiesData": [
+        "breakfast",
+        "pool",
+        "wifi"
+      ],
+      "features": [
+        "Private Pool",
+        "Tropical Garden",
+        "Outdoor Dining"
+      ],
+      "breakfastIncluded": true,
+      "poolAccess": true
+    },
+    {
+      "id": 7,
+      "title": "Beachfront Paradise Villa",
+      "price": 749,
+      "category": "villa",
+      "priceTier": "luxury",
+      "popular": true,
+      "images": [
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
+        "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800"
+      ],
+      "description": "Wake up to the sound of waves in this exclusive beachfront villa with direct beach access and stunning ocean views.",
+      "amenities": [
+        "Private Pool",
+        "Free Wi-Fi",
+        "Smart TV",
+        "Air Conditioning",
+        "Mini Bar",
+        "Room Service",
+        "Beach Access",
+        "Outdoor Shower"
+      ],
+      "size": "95 m²",
+      "bedType": "1 Extra King Bed",
+      "maxGuests": 2,
+      "rating": 5,
+      "ratingLabel": "Exceptional",
+      "reviews": 48,
+      "viewType": "Beachfront",
+      "viewIcon": "fa-solid fa-water",
+      "viewIconColor": "blue",
+      "stars": 5,
+      "amenitiesData": [
+        "breakfast",
+        "pool",
+        "wifi"
+      ],
+      "features": [
+        "Beachfront",
+        "Private Pool",
+        "Beach Access"
+      ],
+      "breakfastIncluded": true,
+      "poolAccess": true
+    },
+    {
+      "id": 3,
+      "title": "Family Suite",
+      "price": 299,
+      "category": "family",
+      "priceTier": "budget",
+      "popular": false,
+      "images": [
+        "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800",
+        "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800"
+      ],
+      "description": "Spacious suite perfect for families with connecting rooms, kid-friendly amenities, and a large living area.",
+      "amenities": [
+        "Connecting Rooms",
+        "Free Wi-Fi",
+        "Smart TV",
+        "Air Conditioning",
+        "Kitchenette",
+        "Room Service",
+        "Beach Access",
+        "Kids Club"
+      ],
+      "size": "75 m²",
+      "bedType": "2 Double Beds",
+      "maxGuests": 4,
+      "rating": 4.6,
+      "ratingLabel": "Very Good",
+      "reviews": 84,
+      "viewType": "Garden View",
+      "viewIcon": "fa-solid fa-tree",
+      "viewIconColor": "emerald",
+      "stars": 4,
+      "amenitiesData": [
+        "breakfast",
+        "wifi"
+      ],
+      "features": [
+        "Connecting Rooms",
+        "Kitchenette",
+        "Kids Club"
+      ],
+      "breakfastIncluded": true,
+      "poolAccess": false
+    },
+    {
+      "id": 8,
+      "title": "Family Garden Villa",
+      "price": 349,
+      "category": "family",
+      "priceTier": "budget",
+      "popular": false,
+      "images": [
+        "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800",
+        "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800",
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800"
+      ],
+      "description": "A family-friendly garden villa with spacious bedrooms, a private garden, and easy access to resort amenities.",
+      "amenities": [
+        "Private Garden",
+        "Free Wi-Fi",
+        "Smart TV",
+        "Air Conditioning",
+        "Kitchenette",
+        "Room Service",
+        "Garden View",
+        "Play Area"
+      ],
+      "size": "80 m²",
+      "bedType": "2 Queen Beds",
+      "maxGuests": 5,
+      "rating": 4.5,
+      "ratingLabel": "Very Good",
+      "reviews": 56,
+      "viewType": "Garden View",
+      "viewIcon": "fa-solid fa-tree",
+      "viewIconColor": "emerald",
+      "stars": 4,
+      "amenitiesData": [
+        "breakfast",
+        "wifi"
+      ],
+      "features": [
+        "Private Garden",
+        "Play Area",
+        "Kitchenette"
+      ],
+      "breakfastIncluded": true,
+      "poolAccess": false
+    },
+    {
+      "id": 9,
+      "title": "Family Beach Suite",
+      "price": 379,
+      "category": "family",
+      "priceTier": "budget",
+      "popular": false,
+      "images": [
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800",
+        "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800",
+        "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800"
+      ],
+      "description": "Perfect for families who love the beach, this suite offers direct beach access and plenty of space for everyone.",
+      "amenities": [
+        "Beach Access",
+        "Free Wi-Fi",
+        "Smart TV",
+        "Air Conditioning",
+        "Kitchenette",
+        "Room Service",
+        "Ocean View",
+        "Kids Club"
+      ],
+      "size": "78 m²",
+      "bedType": "2 Queen Beds",
+      "maxGuests": 5,
+      "rating": 4.4,
+      "ratingLabel": "Good",
+      "reviews": 42,
+      "viewType": "Ocean View",
+      "viewIcon": "fa-solid fa-water",
+      "viewIconColor": "sky",
+      "stars": 4,
+      "amenitiesData": [
+        "breakfast",
+        "wifi"
+      ],
+      "features": [
+        "Beach Access",
+        "Ocean View",
+        "Kids Club"
+      ],
+      "breakfastIncluded": true,
+      "poolAccess": false
+    },
+    {
+      "id": 10,
+      "title": "Presidential Suite",
+      "price": 799,
+      "category": "luxury",
+      "priceTier": "luxury",
+      "popular": true,
+      "images": [
+        "/image/PresidentialSuite.jpg",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
+        "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800"
+      ],
+      "description": "The ultimate luxury experience with a private pool, personal butler service, and panoramic ocean views.",
+      "amenities": [
+        "Private Pool",
+        "Personal Butler",
+        "Free Wi-Fi",
+        "Smart TV",
+        "Air Conditioning",
+        "Mini Bar",
+        "Room Service",
+        "Ocean View",
+        "Private Balcony"
+      ],
+      "size": "120 m²",
+      "bedType": "1 Grand King Bed",
+      "maxGuests": 2,
+      "rating": 5,
+      "ratingLabel": "Exceptional",
+      "reviews": 36,
+      "viewType": "Ocean View",
+      "viewIcon": "fa-solid fa-water",
+      "viewIconColor": "sky",
+      "stars": 5,
+      "amenitiesData": [
+        "breakfast",
+        "pool",
+        "wifi"
+      ],
+      "features": [
+        "Private Pool",
+        "Personal Butler",
+        "Ocean View"
+      ],
+      "breakfastIncluded": true,
+      "poolAccess": true
+    },
+    {
+      "id": 11,
+      "title": "Royal Penthouse",
+      "price": 749,
+      "category": "luxury",
+      "priceTier": "luxury",
+      "popular": true,
+      "images": [
+        "/image/RoyalSuite.webp",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
+        "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800"
+      ],
+      "description": "Perched on the top floor, this penthouse offers 360-degree views, a private rooftop terrace, and exclusive amenities.",
+      "amenities": [
+        "Rooftop Terrace",
+        "Free Wi-Fi",
+        "Smart TV",
+        "Air Conditioning",
+        "Mini Bar",
+        "Room Service",
+        "Panoramic View",
+        "Private Balcony"
+      ],
+      "size": "110 m²",
+      "bedType": "1 King Bed",
+      "maxGuests": 2,
+      "rating": 4.9,
+      "ratingLabel": "Exceptional",
+      "reviews": 28,
+      "viewType": "Panoramic View",
+      "viewIcon": "fa-solid fa-eye",
+      "viewIconColor": "purple",
+      "stars": 5,
+      "amenitiesData": [
+        "breakfast",
+        "wifi"
+      ],
+      "features": [
+        "Rooftop Terrace",
+        "Panoramic View",
+        "Private Balcony"
+      ],
+      "breakfastIncluded": true,
+      "poolAccess": true
+    },
+    {
+      "id": 12,
+      "title": "Luxury Spa Suite",
+      "price": 699,
+      "category": "luxury",
+      "priceTier": "luxury",
+      "popular": false,
+      "images": [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
+        "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800",
+        "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800"
+      ],
+      "description": "A wellness-focused luxury suite with an in-room spa, sauna, and personalized wellness treatments.",
+      "amenities": [
+        "In-room Spa",
+        "Sauna",
+        "Free Wi-Fi",
+        "Smart TV",
+        "Air Conditioning",
+        "Mini Bar",
+        "Room Service",
+        "Garden View"
+      ],
+      "size": "100 m²",
+      "bedType": "1 King Bed",
+      "maxGuests": 2,
+      "rating": 4.8,
+      "ratingLabel": "Excellent",
+      "reviews": 32,
+      "viewType": "Garden View",
+      "viewIcon": "fa-solid fa-spa",
+      "viewIconColor": "emerald",
+      "stars": 5,
+      "amenitiesData": [
+        "breakfast",
+        "pool",
+        "wifi"
+      ],
+      "features": [
+        "In-room Spa",
+        "Sauna",
+        "Wellness Treatments"
+      ],
+      "breakfastIncluded": true,
+      "poolAccess": true
+    }
+  ],
+  "activities": [
+    {
+      "id": 1,
+      "title": "Thrill",
+      "heading": "Jet Ski Ride",
+      "description": "Feel the absolute exhilaration of high-speed exploration across rolling ocean waves. Premium, guided sea-craft rentals tailored entirely for your morning adventure.",
+      "image": "https://gosamuitours.com/img/tour/jetski/jet_ski_samui_20.webp",
+      "reverse": false,
+      "category": "adventure",
+      "duration": "60 Mins",
+      "price": 75,
+      "tag": "Gear Incl.",
+      "icon": "fa-solid fa-ship"
+    },
+    {
+      "id": 2,
+      "title": "Explore",
+      "heading": "Scuba Diving",
+      "description": "Immerse yourself into pristine, quiet marine sanctuaries alongside our certified diving instructors. Discover rich, glowing coral reef systems just off the coastline.",
+      "image": "https://divecambodia.com/images/2a8589a17ebf336bee06069bb7fac97d.jpg",
+      "reverse": true,
+      "category": "adventure",
+      "duration": "3 Hours",
+      "price": 110,
+      "tag": "PADI Guide",
+      "icon": "fa-solid fa-water"
+    },
+    {
+      "id": 3,
+      "title": "Serenity",
+      "heading": "Kayaking Journeys",
+      "description": "Paddle smoothly along quiet, isolated mangrove pathways and beautiful hidden seaside beaches. A truly peaceful escape at your own comfortable speed.",
+      "image": "https://www.soryakayaking.com/wp-content/uploads/2025/06/IMG_3635-scaled.jpg",
+      "reverse": false,
+      "category": "adventure",
+      "duration": "2 Hours",
+      "price": 45,
+      "tag": "Equipment Incl.",
+      "icon": "fa-solid fa-oar"
+    },
+    {
+      "id": 4,
+      "title": "Rejuvenate",
+      "heading": "Traditional Khmer Massage",
+      "description": "Rejuvenate your soul with ancient healing arts passed down through generations, utilizing local organic herbal compresses and aromatic oils.",
+      "image": "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2015/11/05/1721/Hyatt-Regency-Dusseldorf-P616-Spa-Treatment.jpg/Hyatt-Regency-Dusseldorf-P616-Spa-Treatment.16x9.jpg",
+      "reverse": true,
+      "category": "wellness",
+      "duration": "90 Mins",
+      "price": 65,
+      "tag": "Solo / Couples",
+      "icon": "fa-solid fa-spa"
+    },
+    {
+      "id": 5,
+      "title": "Relax",
+      "heading": "Volcanic Hot Stone Therapy",
+      "description": "Smooth, heated volcanic stones are placed on key energy points of your body to melt away deep muscular tension and stress.",
+      "image": "https://www.markaspa.com/wp-content/uploads/2024/11/mix-masaj.webp",
+      "reverse": false,
+      "category": "wellness",
+      "duration": "75 Mins",
+      "price": 80,
+      "tag": "Deep Relax",
+      "icon": "fa-solid fa-fire-burner"
+    },
+    {
+      "id": 6,
+      "title": "Glow",
+      "heading": "Organic Body Scrub",
+      "description": "Exfoliate and nourish your skin using our custom resort blend of local coconut oil, premium sea salt, and wild honey.",
+      "image": "https://farmhouse-smilinggecko.com/wp-content/themes/yootheme/cache/fb/spayoga_img05-fba7181f.jpeg",
+      "reverse": true,
+      "category": "wellness",
+      "duration": "60 Mins",
+      "price": 55,
+      "tag": "100% Organic",
+      "icon": "fa-solid fa-leaf"
+    },
+    {
+      "id": 7,
+      "title": "Sail",
+      "heading": "Luxury Sunset Cruise",
+      "description": "Sail into the golden hour across the pristine waters of Khyal Samut. Includes complimentary premium refreshments, light snacks, and island stops.",
+      "image": "https://media.tacdn.com/media/attractions-splice-spp-674x446/12/65/63/97.jpg",
+      "reverse": false,
+      "category": "cruise",
+      "duration": "4 Hours",
+      "price": 85,
+      "tag": "Snacks Incl.",
+      "icon": "fa-solid fa-sailboat"
+    },
+    {
+      "id": 8,
+      "title": "Escape",
+      "heading": "Private Island Picnic",
+      "description": "Escape to a secluded white-sand island via speed boat. Enjoy a private setup with premium lunch and personal butler service.",
+      "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0f/64/db/95/song-saa-private-island.jpg?w=900&h=500&s=1",
+      "reverse": true,
+      "category": "cruise",
+      "duration": "5 Hours",
+      "price": 150,
+      "tag": "Butler Service",
+      "icon": "fa-solid fa-umbrella-beach"
+    },
+    {
+      "id": 9,
+      "title": "Enchant",
+      "heading": "Bioluminescent Night Tour",
+      "description": "A magical night cruise to witness the glowing blue plankton underneath the dark ocean waves. An unforgettable ethereal experience.",
+      "image": "https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/07/3d/61/f9.jpg",
+      "reverse": false,
+      "category": "cruise",
+      "duration": "2.5 Hours",
+      "price": 95,
+      "tag": "Night Tour",
+      "icon": "fa-solid fa-moon"
+    },
+    {
+      "id": 10,
+      "title": "Taste",
+      "heading": "Sunset Dining Experience",
+      "description": "Savor a curated multi-course dinner on the beach as the sun sets over the ocean. Featuring fresh local seafood and international cuisine.",
+      "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop",
+      "reverse": true,
+      "category": "wellness",
+      "duration": "2.5 Hours",
+      "price": 120,
+      "tag": "Fine Dining",
+      "icon": "fa-solid fa-utensils"
+    },
+    {
+      "id": 11,
+      "title": "Ride",
+      "heading": "ATV Jungle Adventure",
+      "description": "Explore the lush tropical jungle trails on a powerful ATV. Navigate through dense forests, cross streams, and discover hidden waterfalls.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0LwM7aDrvvHQTZ9xpCuNFTyekhykgIiB4T9Fgz1GkSg&s=10",
+      "reverse": false,
+      "category": "adventure",
+      "duration": "3 Hours",
+      "price": 95,
+      "tag": "Guided Tour",
+      "icon": "fa-solid fa-motorcycle"
+    },
+    {
+      "id": 12,
+      "title": "Float",
+      "heading": "Stand-Up Paddleboarding",
+      "description": "Glide across the crystal-clear waters on a stand-up paddleboard. Perfect for all skill levels, enjoy a peaceful morning on the water.",
+      "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop",
+      "reverse": true,
+      "category": "adventure",
+      "duration": "90 Mins",
+      "price": 40,
+      "tag": "Beginner Friendly",
+      "icon": "fa-solid fa-water"
+    }
+  ],
+  "menuItems": [
+    {
+      "id": 1,
+      "title": "Premium Breakfast Platter",
+      "category": "Artisan",
+      "price": 24.99,
+      "time": "6:00 AM - 10:30 AM",
+      "operatingHours": {
+        "open": "6:00",
+        "close": "10:30"
+      },
+      "description": "Start your day right with vibrant, refreshing artisan dishes and beautiful morning selections.",
+      "image": "/image/breakfast.jpg",
+      "badgeColor": "text-resortGreen bg-resortGreen/10"
+    },
+    {
+      "id": 4,
+      "title": "Tropical Fruit & Yogurt Bowl",
+      "category": "Artisan",
+      "price": 16.99,
+      "time": "6:00 AM - 10:30 AM",
+      "operatingHours": {
+        "open": "6:00",
+        "close": "10:30"
+      },
+      "description": "A refreshing blend of fresh tropical fruits, creamy yogurt, honey granola, and coconut flakes.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDozQwGr7Tw90kaTMmZ_fdk4zTN2604EDvKiBDpJPq9A&s=10",
+      "badgeColor": "text-resortGreen bg-resortGreen/10"
+    },
+    {
+      "id": 5,
+      "title": "Artisan Omelette Station",
+      "category": "Artisan",
+      "price": 19.99,
+      "time": "6:00 AM - 10:30 AM",
+      "operatingHours": {
+        "open": "6:00",
+        "close": "10:30"
+      },
+      "description": "Custom-made omelettes with fresh vegetables, premium cheeses, and choice of smoked salmon or ham.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQChixAEUwpbnFKZj_6gfx_Cl0mGb5kbZi_84qrNqd7sw&s",
+      "badgeColor": "text-resortGreen bg-resortGreen/10"
+    },
+    {
+      "id": 2,
+      "title": "Grilled Lobster Thermidor",
+      "category": "Signature Seafood",
+      "price": 42.99,
+      "time": "11:00 AM - 11:00 PM",
+      "operatingHours": {
+        "open": "11:00",
+        "close": "23:00"
+      },
+      "description": "Savor modern signature entrees engineered uniquely from fresh, locally harvested coastal seafood.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcuNu-4H9I-qVaTjBx7PBwVh6x5OKdzO1XuWJvFEKGcLJSn_Xj9jrN8emR&s=10",
+      "badgeColor": "text-amber-600 bg-amber-500/10"
+    },
+    {
+      "id": 6,
+      "title": "Pan-Seared Sea Bass",
+      "category": "Signature Seafood",
+      "price": 32.99,
+      "time": "11:00 AM - 11:00 PM",
+      "operatingHours": {
+        "open": "11:00",
+        "close": "23:00"
+      },
+      "description": "Fresh sea bass with a crispy golden skin, served with lemon butter sauce and seasonal vegetables.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQlqI8YrtwXE-Mf6aq0m0Jgprpum8RRnX2pEv0q_0RTQ&s=10",
+      "badgeColor": "text-amber-600 bg-amber-500/10"
+    },
+    {
+      "id": 7,
+      "title": "Seafood Paella",
+      "category": "Signature Seafood",
+      "price": 38.99,
+      "time": "11:00 AM - 11:00 PM",
+      "operatingHours": {
+        "open": "11:00",
+        "close": "23:00"
+      },
+      "description": "Traditional Spanish paella loaded with prawns, mussels, clams, calamari, and saffron-infused rice.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGVK7wflrEcgE5d4dfqUPBPIPsdVK-KqrlV86SlfkqIw&s=10",
+      "badgeColor": "text-amber-600 bg-amber-500/10"
+    },
+    {
+      "id": 3,
+      "title": "Tropical Sunset Cocktail",
+      "category": "Crafted",
+      "price": 14.99,
+      "time": "Poolside Drinks",
+      "operatingHours": {
+        "open": "10:00",
+        "close": "23:00"
+      },
+      "description": "Relax by the poolside with custom craft beverages, fine global wines, and curated tropical cocktails.",
+      "image": "/image/drink.jpg",
+      "badgeColor": "text-sky-600 bg-sky-500/10"
+    },
+    {
+      "id": 8,
+      "title": "Fresh Coconut Mojito",
+      "category": "Crafted",
+      "price": 12.99,
+      "time": "Poolside Drinks",
+      "operatingHours": {
+        "open": "10:00",
+        "close": "23:00"
+      },
+      "description": "A refreshing blend of fresh coconut water, mint, lime, and premium white rum served over crushed ice.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRywT3XZ8O01VPggGwQsJERLD2bxEFaJCJJKtRFEgkE1g&s=10",
+      "badgeColor": "text-sky-600 bg-sky-500/10"
+    },
+    {
+      "id": 9,
+      "title": "Tropical Smoothie Bowl",
+      "category": "Crafted",
+      "price": 11.99,
+      "time": "Poolside Drinks",
+      "operatingHours": {
+        "open": "10:00",
+        "close": "23:00"
+      },
+      "description": "A vibrant smoothie bowl packed with mango, passion fruit, banana, and topped with fresh berries and granola.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQga0b_mXuatUVc30--mKFleZZJp-YR5wZ_uCHnddhPVA&s=10",
+      "badgeColor": "text-sky-600 bg-sky-500/10"
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "name": "Ra Daro",
+      "date": "June 2026",
+      "rating": 5,
+      "comment": "Absolutely brilliant! The automated room check-in was seamless, and the beachfront view from our private villa was unforgettable. Highly recommend Khyal Samut Resort!",
+      "roomType": "Ocean View Suite",
+      "verified": true,
+      "likes": 0,
+      "createdAt": "2026-06-15T00:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Mak Reaksa",
+      "date": "May 2026",
+      "rating": 5,
+      "comment": "Amazing place with great views, friendly staff and excellent service. The smart controls inside the room made everything so futuristic yet relaxing!",
+      "roomType": "Private Garden Villa",
+      "verified": true,
+      "likes": 3,
+      "createdAt": "2026-05-18T00:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "name": "Sokha P.",
+      "date": "April 2026",
+      "rating": 4,
+      "comment": "Beautiful resort with amazing food. The staff were incredibly friendly and helpful. Would definitely come back!",
+      "roomType": "Family Suite",
+      "verified": true,
+      "likes": 1,
+      "createdAt": "2026-04-10T00:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "name": "John Doe",
+      "date": "March 2026",
+      "rating": 5,
+      "comment": "The infinity pool overlooking the ocean is breathtaking. The staff went above and beyond to make our stay special. Can't wait to return!",
+      "roomType": "Ocean View Suite",
+      "verified": true,
+      "likes": 7,
+      "createdAt": "2026-03-25T00:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "name": "Mary Chen",
+      "date": "February 2026",
+      "rating": 4,
+      "comment": "Beautiful property with stunning views. The food at the restaurant was excellent. The room could use a bit more lighting, but overall a wonderful experience.",
+      "roomType": "Deluxe Room",
+      "verified": true,
+      "likes": 2,
+      "createdAt": "2026-02-14T00:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "name": "David Kim",
+      "date": "January 2026",
+      "rating": 5,
+      "comment": "From check-in to check-out, everything was perfect. The private beach access and sunset views made our honeymoon unforgettable. Highly recommended!",
+      "roomType": "Private Garden Villa",
+      "verified": true,
+      "likes": 12,
+      "createdAt": "2026-01-20T00:00:00.000Z"
+    }
+  ],
+  "galleryItems": [
+    {
+      "id": 1,
+      "image": "/image/Gallery1.jpg",
+      "title": "Architecture Panorama"
+    },
+    {
+      "id": 2,
+      "image": "/image/Gallery4.webp",
+      "title": "Ocean Horizon Lounge"
+    },
+    {
+      "id": 3,
+      "image": "/image/Gallery3.jpg",
+      "title": "Infinity Pool Deck"
+    },
+    {
+      "id": 4,
+      "image": "/image/Gallery2.jpg",
+      "title": "Private Suite Balcony"
+    }
+  ]
+}

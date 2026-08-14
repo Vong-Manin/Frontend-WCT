@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "menu_items",
+  "info": {
+    "singularName": "menu-item",
+    "pluralName": "menu-items",
+    "displayName": "Menu Item",
+    "description": "Restaurant food, beverage, and dining entries"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "legacyId": { "type": "integer", "required": true, "unique": true },
+    "title": { "type": "string", "required": true },
+    "category": { "type": "string", "required": true },
+    "price": { "type": "decimal", "required": true, "min": 0 },
+    "time": { "type": "string" },
+    "openingTime": { "type": "time" },
+    "closingTime": { "type": "time" },
+    "description": { "type": "text", "required": true },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "badgeColor": { "type": "string" },
+    "tableBookings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::table-booking.table-booking",
+      "mappedBy": "menuItem"
+    }
+  }
+}

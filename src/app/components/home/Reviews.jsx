@@ -1,49 +1,123 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useMemo, useState, useEffect } from "react";
 import ReviewDrawer from "./ReviewDrawer";
 import { initialReviews } from "@/app/data/reviews";
+import { useAuth, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
+import {
+  createReview,
+  deleteReview,
+  getReviews,
+  updateReview,
+} from "@/lib/services/reviews";
 
 export default function Reviews() {
+  const router = useRouter();
+  const { getToken } = useAuth();
+  const { isLoaded, isSignedIn, user } = useUser();
+  const { rooms } = useResortContent();
   const [reviews, setReviews] = useState([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [averageRating, setAverageRating] = useState(0);
-  const [totalReviews, setTotalReviews] = useState(0);
   const [sortBy, setSortBy] = useState("newest");
   const [showAllReviews, setShowAllReviews] = useState(false);
+  const [editingReview, setEditingReview] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reviewError, setReviewError] = useState("");
 
   useEffect(() => {
-    setReviews(initialReviews);
-    calculateStats(initialReviews);
-  }, []);
+    if (!isLoaded) return;
+    let active = true;
+    (async () => {
+      try {
+        const token = isSignedIn ? await getToken() : null;
+        const apiReviews = await getReviews(token);
+        if (active) {
+          setReviews(apiReviews);
+          setReviewError("");
+        }
+      } catch (error) {
+        if (active) {
+          setReviews(initialReviews);
+          setReviewError(`${error.message} Showing the preserved review copy.`);
+        }
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [isLoaded, isSignedIn, getToken]);
 
-  const calculateStats = (reviewList) => {
-    if (reviewList.length === 0) {
-      setAverageRating(0);
-      setTotalReviews(0);
-      return;
+  const totalReviews = reviews.length;
+  const averageRating = useMemo(
+    () =>
+      totalReviews
+        ? reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews
+        : 0,
+    [reviews, totalReviews],
+  );
+
+  const addReview = async (newReview) => {
+    setIsSubmitting(true);
+    setReviewError("");
+    try {
+      const token = await getToken();
+      if (!token) throw new Error("Please sign in before publishing a review.");
+      const selectedRoom = rooms.find((room) => room.title === newReview.roomType);
+      const payload = {
+        comment: newReview.comment,
+        rating: newReview.rating,
+        stayDate: newReview.stayDate,
+        roomType: newReview.roomType,
+        ...(selectedRoom
+          ? {
+              room: selectedRoom.documentId
+                ? { documentId: selectedRoom.documentId }
+                : { legacyId: selectedRoom.id },
+            }
+          : {}),
+      };
+      if (editingReview) {
+        const saved = await updateReview(editingReview.documentId, payload, token);
+        setReviews((current) =>
+          current.map((review) => (review.documentId === saved.documentId ? saved : review)),
+        );
+      } else {
+        const saved = await createReview(payload, token);
+        setReviews((current) => [saved, ...current]);
+      }
+      setEditingReview(null);
+    } catch (error) {
+      setReviewError(error.message);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
     }
-    const total = reviewList.reduce((sum, r) => sum + r.rating, 0);
-    setAverageRating(total / reviewList.length);
-    setTotalReviews(reviewList.length);
   };
 
-  const addReview = (newReview) => {
-    const updatedReviews = [
-      {
-        ...newReview,
-        id: Date.now(),
-        likes: 0,
-        liked: false,
-        verified: false,
-        adminReply: null,
-        createdAt: new Date().toISOString(),
-      },
-      ...reviews,
-    ];
-    setReviews(updatedReviews);
-    calculateStats(updatedReviews);
+  const openReviewDrawer = (review = null) => {
+    if (!isSignedIn) {
+      router.push(`/sign-in?redirect_url=${encodeURIComponent("/#reviews")}`);
+      return;
+    }
+    setEditingReview(review);
+    setReviewError("");
+    setIsDrawerOpen(true);
+  };
+
+  const handleDelete = async (review) => {
+    if (!window.confirm("Delete this review? This cannot be undone.")) return;
+    setReviewError("");
+    try {
+      const token = await getToken();
+      await deleteReview(review.documentId, token);
+      setReviews((current) =>
+        current.filter((item) => item.documentId !== review.documentId),
+      );
+    } catch (error) {
+      setReviewError(error.message);
+    }
   };
 
   const getSortedReviews = () => {
@@ -109,7 +183,7 @@ export default function Reviews() {
 
   return (
     <>
-      <section className="relative bg-white dark:bg-slate-950 py-10 sm:py-14 lg:py-18 overflow-hidden">
+      <section id="reviews" className="relative bg-white dark:bg-slate-950 py-10 sm:py-14 lg:py-18 overflow-hidden">
         {/* Background Decor */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 right-20 w-72 h-72 bg-resortGreen/5 rounded-full blur-3xl"></div>
@@ -174,6 +248,11 @@ export default function Reviews() {
           </div>
 
           {/* Reviews Grid */}
+          {reviewError && (
+            <div className="mx-auto max-w-4xl rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-center text-xs text-rose-700 dark:border-rose-800 dark:bg-rose-950/30 dark:text-rose-300">
+              {reviewError}
+            </div>
+          )}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
             {displayedReviews.map((review) => (
               <div
@@ -267,6 +346,22 @@ export default function Reviews() {
                       {review.likes || 0}
                     </span>
                   </button>
+                  {review.isOwner && (
+                    <div className="ml-auto flex items-center gap-3">
+                      <button
+                        onClick={() => openReviewDrawer(review)}
+                        className="text-[10px] font-semibold text-slate-400 transition-colors hover:text-resortGreen"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(review)}
+                        className="text-[10px] font-semibold text-slate-400 transition-colors hover:text-rose-500"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -307,7 +402,7 @@ export default function Reviews() {
               </div>
             </div>
             <button
-              onClick={() => setIsDrawerOpen(true)}
+              onClick={() => openReviewDrawer()}
               className="flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-resortGreen hover:bg-resortGreen-dark text-white text-[10px] font-bold uppercase tracking-widest transition-all shadow-lg hover:shadow-resortGreen/30 active:scale-95 cursor-pointer group"
             >
               <span>Write A Review</span>
@@ -318,9 +413,19 @@ export default function Reviews() {
       </section>
 
       <ReviewDrawer
+        key={`${isDrawerOpen}-${editingReview?.documentId || "new"}`}
         isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
+        onClose={() => {
+          setIsDrawerOpen(false);
+          setEditingReview(null);
+          setReviewError("");
+        }}
         onAddReview={addReview}
+        review={editingReview}
+        currentUserName={user?.fullName || user?.firstName || "Resort Guest"}
+        rooms={rooms}
+        isSubmitting={isSubmitting}
+        error={reviewError}
       />
     </>
   );

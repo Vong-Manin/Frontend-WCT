@@ -3,9 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { rooms } from "@/app/data/rooms";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
 
 export default function Rooms() {
+  const { rooms } = useResortContent();
   // ✅ Only show first 3 rooms (one full row)
   const displayedRooms = rooms.slice(0, 3);
 

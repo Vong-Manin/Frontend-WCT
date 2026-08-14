@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import RestaurantCard from "./RestaurantCard";
-import { dining } from "@/app/data/dining";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
 
 export default function RestaurantMenu() {
+  const { dining } = useResortContent();
   const [activeCategory, setActiveCategory] = useState("all");
 
   // Get unique categories from data

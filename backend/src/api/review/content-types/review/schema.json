@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviews",
+  "info": {
+    "singularName": "review",
+    "pluralName": "reviews",
+    "displayName": "Review"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "title": { "type": "string" },
+    "comment": { "type": "text", "required": true },
+    "rating": { "type": "integer", "required": true, "min": 1, "max": 5 },
+    "username": { "type": "string", "required": true },
+    "stayDate": { "type": "date" },
+    "roomType": { "type": "string" },
+    "verified": { "type": "boolean", "default": false },
+    "likes": { "type": "integer", "min": 0, "default": 0 },
+    "adminReply": { "type": "json" },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::site-user.site-user",
+      "inversedBy": "reviews"
+    },
+    "room": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::room.room",
+      "inversedBy": "reviews"
+    }
+  }
+}

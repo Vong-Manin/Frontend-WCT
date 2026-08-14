@@ -1,40 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getReviews } from "@/lib/services/reviews";
 
 export default function RoomReviews({ roomId, rating, ratingLabel, reviews }) {
   const [showAll, setShowAll] = useState(false);
+  const [reviewData, setReviewData] = useState([]);
+  const [reviewError, setReviewError] = useState("");
 
-  // Sample reviews - in real app, fetch from API
-  const reviewData = [
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      date: "August 2026",
-      rating: 5,
-      comment:
-        "Absolutely stunning room! The ocean view was breathtaking and the staff were incredibly welcoming. Highly recommend!",
-      verified: true,
-    },
-    {
-      id: 2,
-      name: "Michael Chen",
-      date: "July 2026",
-      rating: 5,
-      comment:
-        "Perfect getaway. The room was spacious, clean, and had everything we needed. The private balcony was a highlight.",
-      verified: true,
-    },
-    {
-      id: 3,
-      name: "Emma Williams",
-      date: "June 2026",
-      rating: 4,
-      comment:
-        "Beautiful room with great amenities. Only minor issue was the Wi-Fi speed, but otherwise fantastic stay.",
-      verified: true,
-    },
-  ];
+  useEffect(() => {
+    let active = true;
+    getReviews(null, roomId)
+      .then((result) => active && setReviewData(result))
+      .catch((error) => active && setReviewError(error.message));
+    return () => {
+      active = false;
+    };
+  }, [roomId]);
 
   const displayedReviews = showAll ? reviewData : reviewData.slice(0, 2);
 
@@ -62,6 +44,16 @@ export default function RoomReviews({ roomId, rating, ratingLabel, reviews }) {
       </div>
 
       <div className="space-y-4">
+        {reviewError && (
+          <p className="rounded-xl bg-rose-50 p-3 text-xs text-rose-700 dark:bg-rose-950/30 dark:text-rose-300">
+            {reviewError}
+          </p>
+        )}
+        {!reviewError && reviewData.length === 0 && (
+          <p className="py-4 text-sm text-slate-500 dark:text-slate-400">
+            No guest reviews have been published for this room yet.
+          </p>
+        )}
         {displayedReviews.map((review) => (
           <div
             key={review.id}

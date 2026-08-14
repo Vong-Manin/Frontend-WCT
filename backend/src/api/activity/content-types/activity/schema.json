@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "activities",
+  "info": {
+    "singularName": "activity",
+    "pluralName": "activities",
+    "displayName": "Activity",
+    "description": "Bookable resort experiences"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "legacyId": { "type": "integer", "required": true, "unique": true },
+    "title": { "type": "string", "required": true },
+    "heading": { "type": "string", "required": true },
+    "description": { "type": "text", "required": true },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "reverse": { "type": "boolean", "default": false },
+    "category": {
+      "type": "enumeration",
+      "enum": ["adventure", "wellness", "cruise"],
+      "required": true
+    },
+    "duration": { "type": "string" },
+    "price": { "type": "decimal", "required": true, "min": 0 },
+    "tag": { "type": "string" },
+    "icon": { "type": "string" },
+    "popular": { "type": "boolean", "default": false },
+    "maxGuests": { "type": "integer", "min": 1, "default": 10 },
+    "bookings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::activity-booking.activity-booking",
+      "mappedBy": "activity"
+    }
+  }
+}

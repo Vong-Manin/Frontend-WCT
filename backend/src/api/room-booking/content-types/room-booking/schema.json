@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "room_bookings",
+  "info": {
+    "singularName": "room-booking",
+    "pluralName": "room-bookings",
+    "displayName": "Room Booking"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "bookingReference": { "type": "string", "required": true, "unique": true },
+    "customerName": { "type": "string", "required": true },
+    "email": { "type": "email", "required": true },
+    "phone": { "type": "string", "required": true },
+    "checkInDate": { "type": "date", "required": true },
+    "checkOutDate": { "type": "date", "required": true },
+    "numberOfGuests": { "type": "integer", "required": true, "min": 1 },
+    "numberOfRooms": { "type": "integer", "required": true, "min": 1 },
+    "numberOfNights": { "type": "integer", "required": true, "min": 1 },
+    "subtotal": { "type": "decimal", "required": true, "min": 0 },
+    "serviceFee": { "type": "decimal", "required": true, "min": 0 },
+    "tax": { "type": "decimal", "required": true, "min": 0 },
+    "totalPrice": { "type": "decimal", "required": true, "min": 0 },
+    "bookingStatus": {
+      "type": "enumeration",
+      "enum": ["pending", "confirmed", "cancelled"],
+      "default": "confirmed",
+      "required": true
+    },
+    "specialRequest": { "type": "text" },
+    "paymentMethod": {
+      "type": "enumeration",
+      "enum": ["credit_card", "paypal", "bank_transfer"],
+      "default": "credit_card"
+    },
+    "bookingItems": { "type": "json", "required": true },
+    "rooms": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::room.room",
+      "inversedBy": "bookings"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::site-user.site-user",
+      "inversedBy": "roomBookings"
+    }
+  }
+}

@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { activities } from "../../data/activities";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
 
 export default function Activities() {
+  const { activities } = useResortContent();
   // Only show first 3 activities
   const displayedActivities = activities.slice(0, 3);
 

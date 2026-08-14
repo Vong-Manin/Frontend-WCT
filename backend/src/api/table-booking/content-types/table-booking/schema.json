@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "table_bookings",
+  "info": {
+    "singularName": "table-booking",
+    "pluralName": "table-bookings",
+    "displayName": "Table Booking"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "bookingReference": { "type": "string", "required": true, "unique": true },
+    "customerName": { "type": "string", "required": true },
+    "email": { "type": "email", "required": true },
+    "phone": { "type": "string", "required": true },
+    "bookingDate": { "type": "date", "required": true },
+    "bookingTime": { "type": "string", "required": true },
+    "numberOfGuests": { "type": "integer", "required": true, "min": 1, "max": 20 },
+    "specialRequest": { "type": "text" },
+    "bookingStatus": {
+      "type": "enumeration",
+      "enum": ["pending", "confirmed", "cancelled"],
+      "default": "confirmed",
+      "required": true
+    },
+    "menuItem": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::menu-item.menu-item",
+      "inversedBy": "tableBookings"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::site-user.site-user",
+      "inversedBy": "tableBookings"
+    }
+  }
+}

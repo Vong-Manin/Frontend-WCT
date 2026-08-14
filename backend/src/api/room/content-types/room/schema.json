@@ -1,0 +1,61 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rooms",
+  "info": {
+    "singularName": "room",
+    "pluralName": "rooms",
+    "displayName": "Room",
+    "description": "Resort room and villa inventory displayed by the Next.js site"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "legacyId": { "type": "integer", "required": true, "unique": true },
+    "title": { "type": "string", "required": true },
+    "price": { "type": "decimal", "required": true, "min": 0 },
+    "category": {
+      "type": "enumeration",
+      "enum": ["suite", "villa", "family", "luxury"],
+      "required": true
+    },
+    "priceTier": {
+      "type": "enumeration",
+      "enum": ["budget", "moderate", "luxury"],
+      "required": true
+    },
+    "popular": { "type": "boolean", "default": false },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "description": { "type": "text", "required": true },
+    "amenities": { "type": "json" },
+    "size": { "type": "string" },
+    "bedType": { "type": "string" },
+    "maxGuests": { "type": "integer", "min": 1, "default": 1 },
+    "rating": { "type": "decimal", "min": 0, "max": 5 },
+    "ratingLabel": { "type": "string" },
+    "reviewCount": { "type": "integer", "min": 0, "default": 0 },
+    "viewType": { "type": "string" },
+    "viewIcon": { "type": "string" },
+    "viewIconColor": { "type": "string" },
+    "stars": { "type": "integer", "min": 1, "max": 5 },
+    "amenitiesData": { "type": "json" },
+    "features": { "type": "json" },
+    "breakfastIncluded": { "type": "boolean", "default": false },
+    "poolAccess": { "type": "boolean", "default": false },
+    "bookings": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::room-booking.room-booking",
+      "mappedBy": "rooms"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "room"
+    }
+  }
+}
