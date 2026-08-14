@@ -4,6 +4,7 @@ function mapReview(review) {
   return {
     ...review,
     id: review.documentId,
+    name: review.username,
     date: formatReviewDate(review.stayDate || review.createdAt),
     liked: false,
   };

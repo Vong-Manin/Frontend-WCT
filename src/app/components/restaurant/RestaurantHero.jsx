@@ -1,6 +1,10 @@
 "use client";
 
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
+
 export default function RestaurantHero() {
+  const { restaurantHero } = useResortContent();
+
   return (
     <section className="relative min-h-[50vh] sm:min-h-[55vh] lg:min-h-[60vh] flex items-center justify-center overflow-hidden pt-20 sm:pt-24 lg:pt-28 pb-12 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-8">
       {/* Background Image */}
@@ -9,7 +13,9 @@ export default function RestaurantHero() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop')",
+              restaurantHero?.image?.url
+                ? `url("${restaurantHero.image.url}")`
+                : undefined,
             backgroundPosition: "center 40%",
           }}
         ></div>

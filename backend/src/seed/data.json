@@ -922,5 +922,79 @@
       "image": "/image/Gallery2.jpg",
       "title": "Private Suite Balcony"
     }
+  ],
+  "heroSlides": [
+    {
+      "id": 1,
+      "title": "Coastal resort panorama",
+      "placement": "home",
+      "image": "/image/hero-bg.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Resort escape",
+      "placement": "home",
+      "image": "https://www.sunsetworldresorts.com/newsite/wp-content/uploads/2024/10/banner-principal-SR.webp"
+    },
+    {
+      "id": 3,
+      "title": "Coastal dining",
+      "placement": "home",
+      "image": "https://luxcity.com/storage/photos/7/blogs/seafood-restaurant-phnom-penh-4.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Rooms and villas",
+      "placement": "rooms",
+      "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop"
+    },
+    {
+      "id": 5,
+      "title": "Restaurant hero",
+      "placement": "restaurant",
+      "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop"
+    }
+  ],
+  "restaurantGalleryItems": [
+    {
+      "id": 1,
+      "title": "Restaurant interior",
+      "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600"
+    },
+    {
+      "id": 2,
+      "title": "Dining room",
+      "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=600"
+    },
+    {
+      "id": 3,
+      "title": "Fine dining table",
+      "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600"
+    },
+    {
+      "id": 4,
+      "title": "Restaurant setting",
+      "image": "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=600"
+    },
+    {
+      "id": 5,
+      "title": "Fresh ingredients",
+      "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600"
+    },
+    {
+      "id": 6,
+      "title": "Table service",
+      "image": "https://images.unsplash.com/photo-1544148103-0773bf10d330?w=600"
+    },
+    {
+      "id": 7,
+      "title": "Signature dish",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600"
+    },
+    {
+      "id": 8,
+      "title": "Seasonal bowl",
+      "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600"
+    }
   ]
 }

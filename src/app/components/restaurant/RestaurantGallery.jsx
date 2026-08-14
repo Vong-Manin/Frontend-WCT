@@ -1,19 +1,11 @@
 "use client";
 
 import Image from "next/image";
-
-const galleryImages = [
-  "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600",
-  "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=600",
-  "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600",
-  "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=600",
-  "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600",
-  "https://images.unsplash.com/photo-1544148103-0773bf10d330?w=600",
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600",
-  "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600",
-];
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
 
 export default function RestaurantGallery() {
+  const { restaurantGallery } = useResortContent();
+
   return (
     <div>
       <div className="text-center mb-10 sm:mb-12">
@@ -26,14 +18,14 @@ export default function RestaurantGallery() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-        {galleryImages.map((img, idx) => (
+        {restaurantGallery.map((item, idx) => (
           <div
-            key={idx}
+            key={item.id}
             className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer"
           >
             <Image
-              src={img}
-              alt={`Restaurant gallery ${idx + 1}`}
+              src={item.image?.url || "/image/placeholder.jpg"}
+              alt={item.image?.alternativeText || item.title || `Restaurant gallery ${idx + 1}`}
               width={400}
               height={400}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"

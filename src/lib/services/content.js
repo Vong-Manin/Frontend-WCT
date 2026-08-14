@@ -1,8 +1,24 @@
+import "server-only";
+
 import { getStrapiMediaUrl, strapiRequest } from "@/lib/strapi";
 
 function number(value, fallback = 0) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function mapMedia(media) {
+  const url = getStrapiMediaUrl(media);
+  if (!url) return null;
+
+  return {
+    id: media.id,
+    documentId: media.documentId,
+    url,
+    width: media.width ?? null,
+    height: media.height ?? null,
+    alternativeText: media.alternativeText || null,
+  };
 }
 
 function mapRoom(room) {
@@ -12,9 +28,7 @@ function mapRoom(room) {
     price: number(room.price),
     rating: number(room.rating),
     reviews: room.reviewCount || 0,
-    images: room.images?.length
-      ? room.images.map(getStrapiMediaUrl)
-      : ["/image/placeholder.jpg"],
+    images: (room.images || []).map(mapMedia).filter(Boolean),
   };
 }
 
@@ -23,7 +37,7 @@ function mapActivity(activity) {
     ...activity,
     id: activity.legacyId,
     price: number(activity.price),
-    image: getStrapiMediaUrl(activity.image),
+    image: mapMedia(activity.image),
   };
 }
 
@@ -32,7 +46,7 @@ function mapMenuItem(item) {
     ...item,
     id: item.legacyId,
     price: number(item.price),
-    image: getStrapiMediaUrl(item.image),
+    image: mapMedia(item.image),
     operatingHours: {
       open: item.openingTime?.slice(0, 5) || "06:00",
       close: item.closingTime?.slice(0, 5) || "22:00",
@@ -44,7 +58,7 @@ function mapGalleryItem(item) {
   return {
     ...item,
     id: item.legacyId,
-    image: getStrapiMediaUrl(item.image),
+    image: mapMedia(item.image),
   };
 }
 
@@ -72,4 +86,42 @@ export async function getGalleryItems() {
     "/gallery-items?populate[image]=true&sort=legacyId:asc&pagination[pageSize]=100",
   );
   return items.map(mapGalleryItem);
+}
+
+export async function getHeroSlides(placement = "home") {
+  const slides = await strapiRequest(
+    `/hero-slides?populate[image]=true&filters[placement][$eq]=${placement}&sort=legacyId:asc&pagination[pageSize]=10`,
+  );
+  return slides.map(mapGalleryItem);
+}
+
+export async function getRestaurantGalleryItems() {
+  const items = await strapiRequest(
+    "/restaurant-gallery-items?populate[image]=true&sort=legacyId:asc&pagination[pageSize]=100",
+  );
+  return items.map(mapGalleryItem);
+}
+
+export async function getResortContent() {
+  const [rooms, activities, dining, gallery, heroSlides, roomHeroSlides, restaurantHeroSlides, restaurantGallery] = await Promise.all([
+    getRooms(),
+    getActivities(),
+    getMenuItems(),
+    getGalleryItems(),
+    getHeroSlides(),
+    getHeroSlides("rooms"),
+    getHeroSlides("restaurant"),
+    getRestaurantGalleryItems(),
+  ]);
+
+  return {
+    rooms,
+    activities,
+    dining,
+    gallery,
+    heroSlides,
+    roomHero: roomHeroSlides[0] || null,
+    restaurantHero: restaurantHeroSlides[0] || null,
+    restaurantGallery,
+  };
 }

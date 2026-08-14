@@ -14,7 +14,7 @@ export class StrapiApiError extends Error {
 
 export function getStrapiMediaUrl(media) {
   const url = typeof media === "string" ? media : media?.url;
-  if (!url) return "/image/placeholder.jpg";
+  if (!url) return null;
   return url.startsWith("http") ? url : `${STRAPI_URL}${url}`;
 }
 

@@ -55,8 +55,8 @@ export default function BookingModal({
         {activity && (
           <div className="relative h-32 sm:h-40">
             <Image
-              src={activity.image}
-              alt={activity.heading}
+              src={activity.image?.url || "/image/placeholder.jpg"}
+              alt={activity.image?.alternativeText || activity.heading}
               fill
               className="object-cover"
             />

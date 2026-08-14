@@ -106,8 +106,8 @@ export default function Dining() {
               {/* Image */}
               <div className="relative overflow-hidden aspect-[4/3] flex-shrink-0">
                 <Image
-                  src={item.image}
-                  alt={item.title}
+                  src={item.image?.url || "/image/placeholder.jpg"}
+                  alt={item.image?.alternativeText || item.title}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

@@ -3,6 +3,7 @@
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const sharp = require('sharp');
 const data = require('./data.json');
 
 const repoRoot = path.resolve(__dirname, '../../..');
@@ -42,6 +43,23 @@ async function materializeImage(source, baseName) {
     const localPath = path.join(repoRoot, 'public', source);
     const stat = fs.statSync(localPath);
     const extension = path.extname(localPath).slice(1).toLowerCase();
+    const metadata = await sharp(localPath).metadata();
+
+    // A legacy hero asset is AVIF data with a .jpg name. Convert it so Strapi
+    // can create valid dimensions and responsive formats in the Media Library.
+    if (metadata.mediaType === 'image/avif' && extension !== 'avif') {
+      const temporaryPath = path.join(os.tmpdir(), `${baseName}-${Date.now()}.jpg`);
+      await sharp(localPath).jpeg({ quality: 90 }).toFile(temporaryPath);
+      const convertedStat = fs.statSync(temporaryPath);
+      return {
+        filepath: temporaryPath,
+        originalFilename: `${baseName}.jpg`,
+        mimetype: 'image/jpeg',
+        size: convertedStat.size,
+        temporary: true,
+      };
+    }
+
     return {
       filepath: localPath,
       originalFilename: `${baseName}.${extension}`,
@@ -73,7 +91,17 @@ async function attachMedia(strapi, { uid, documentId, field, sources, legacyId }
     populate: [field],
   });
   const current = populated[field];
-  if ((Array.isArray(current) && current.length) || (!Array.isArray(current) && current)) return;
+  const hasCompleteMedia = Array.isArray(current)
+    ? current.length && current.every((file) => file.url && file.width && file.height)
+    : current?.url && current.width && current.height;
+  if (hasCompleteMedia) return;
+
+  if (current) {
+    await strapi.documents(uid).update({
+      documentId,
+      data: { [field]: null },
+    });
+  }
 
   const sourceList = Array.isArray(sources) ? sources : [sources];
   for (let index = 0; index < sourceList.length; index += 1) {
@@ -180,6 +208,23 @@ async function seedGallery(strapi) {
   }
 }
 
+async function seedSingleImageCollection(strapi, { entries, uid }) {
+  for (const entry of entries) {
+    const { id, image, ...fields } = entry;
+    const document = await upsertByLegacyId(strapi, uid, {
+      legacyId: id,
+      ...fields,
+    });
+    await attachMedia(strapi, {
+      uid,
+      documentId: document.documentId,
+      field: 'image',
+      sources: image,
+      legacyId: id,
+    });
+  }
+}
+
 async function seedReviews(strapi) {
   const store = strapi.documents('api::review.review');
   const rooms = await strapi.documents('api::room.room').findMany({ limit: 100 });
@@ -214,6 +259,14 @@ module.exports = async function seed({ strapi }) {
   await seedActivities(strapi);
   await seedMenuItems(strapi);
   await seedGallery(strapi);
+  await seedSingleImageCollection(strapi, {
+    entries: data.heroSlides || [],
+    uid: 'api::hero-slide.hero-slide',
+  });
+  await seedSingleImageCollection(strapi, {
+    entries: data.restaurantGalleryItems || [],
+    uid: 'api::restaurant-gallery-item.restaurant-gallery-item',
+  });
   await seedReviews(strapi);
   strapi.log.info('Resort seed synchronization complete.');
 };

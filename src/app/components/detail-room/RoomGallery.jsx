@@ -8,7 +8,7 @@ export default function RoomGallery({ images, title }) {
 
   // Ensure we have at least one image
   const imageList =
-    images && images.length > 0 ? images : ["/image/placeholder.jpg"];
+    images && images.length > 0 ? images : [];
   const mainImage = imageList[activeImage] || imageList[0];
 
   return (
@@ -17,8 +17,8 @@ export default function RoomGallery({ images, title }) {
       <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
         <div className="absolute inset-0 rounded-lg sm:rounded-xl overflow-hidden bg-slate-100">
           <Image
-            src={mainImage}
-            alt={`${title} - Image ${activeImage + 1}`}
+            src={mainImage?.url || "/image/placeholder.jpg"}
+            alt={mainImage?.alternativeText || `${title} - Image ${activeImage + 1}`}
             fill
             className="object-cover"
             priority={activeImage === 0}
@@ -48,8 +48,8 @@ export default function RoomGallery({ images, title }) {
                 }}
               >
                 <Image
-                  src={img}
-                  alt={`${title} thumbnail ${idx + 1}`}
+                  src={img.url || "/image/placeholder.jpg"}
+                  alt={img.alternativeText || `${title} thumbnail ${idx + 1}`}
                   fill
                   className="object-cover"
                   sizes="(max-width: 640px) 20vw, (max-width: 1024px) 15vw, 10vw"

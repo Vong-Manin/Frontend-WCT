@@ -9,8 +9,8 @@ export default function RestaurantCard({ item }) {
       {/* Image */}
       <div className="relative overflow-hidden aspect-[4/3]">
         <Image
-          src={item.image}
-          alt={item.title}
+          src={item.image?.url || "/image/placeholder.jpg"}
+          alt={item.image?.alternativeText || item.title}
           width={600}
           height={400}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

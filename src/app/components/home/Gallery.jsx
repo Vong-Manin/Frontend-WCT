@@ -27,8 +27,8 @@ export default function Gallery() {
             className="overflow-hidden rounded-2xl aspect-square shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-800 group relative"
           >
             <Image
-              src={item.image}
-              alt={item.title}
+              src={item.image?.url || "/image/placeholder.jpg"}
+              alt={item.image?.alternativeText || item.title}
               width={600}
               height={600}
               className="w-full h-full object-cover transform group-hover:scale-105 duration-700 ease-out"

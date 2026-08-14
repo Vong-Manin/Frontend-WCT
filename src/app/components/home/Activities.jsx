@@ -54,15 +54,11 @@ export default function Activities() {
                 <Link href={`/activities/${activity.id}`}>
                   <div className="overflow-hidden aspect-[4/3] cursor-pointer">
                     <Image
-                      src={activity.image}
-                      alt={activity.heading}
+                      src={activity.image?.url || "/image/placeholder.jpg"}
+                      alt={activity.image?.alternativeText || activity.heading}
                       width={600}
                       height={400}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      onError={(e) => {
-                        e.target.src =
-                          "https://via.placeholder.com/600x400/127541/FFFFFF?text=Activity";
-                      }}
                     />
                     {activity.popular && (
                       <div className="absolute top-3 sm:top-4 left-3 sm:left-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-lg border border-resortGreen/20">

@@ -205,10 +205,9 @@ export default function ActivitiesPage() {
               <div className="relative aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
                 <Image
                   src={
-                    featuredActivity?.image ||
-                    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2070&auto=format&fit=crop"
+                    featuredActivity?.image?.url || "/image/placeholder.jpg"
                   }
-                  alt="Featured Activity"
+                  alt={featuredActivity?.image?.alternativeText || "Featured Activity"}
                   fill
                   className="object-cover"
                   priority

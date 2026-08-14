@@ -1,6 +1,7 @@
 "use client";
 
 import RoomSearch from "./RoomSearch";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
 
 export default function RoomHero({
   checkIn,
@@ -13,6 +14,8 @@ export default function RoomHero({
   setRoomsCount,
   onSearch,
 }) {
+  const { roomHero } = useResortContent();
+
   return (
     <section className="relative min-h-[55vh] sm:min-h-[65vh] lg:min-h-[80vh] flex items-center justify-center overflow-visible pt-16 sm:pt-20 lg:pt-28 pb-12 sm:pb-16 lg:pb-28 px-4 sm:px-6 lg:px-8">
       <div className="absolute inset-0 z-0">
@@ -20,7 +23,7 @@ export default function RoomHero({
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop')",
+              roomHero?.image?.url ? `url("${roomHero.image.url}")` : undefined,
             backgroundPosition: "center 30%",
           }}
         ></div>

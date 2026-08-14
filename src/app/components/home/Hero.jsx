@@ -1,14 +1,31 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
+import { useResortContent } from "@/app/components/providers/ResortContentProvider";
 
 export default function Hero() {
+  const { heroSlides } = useResortContent();
+  const slideAnimations = ["animate-slide-1", "animate-slide-2", "animate-slide-3"];
+
   return (
     <section className="relative min-h-[70vh] sm:min-h-[80vh] lg:h-[85vh] flex items-center justify-center bg-slate-950 text-white overflow-hidden">
       {/* Background Slideshow - Responsive */}
-      <div className="absolute inset-0 bg-[url('/image/hero-bg.jpg')] bg-cover bg-center animate-slide-1"></div>
-      <div className="absolute inset-0 bg-[url('https://www.sunsetworldresorts.com/newsite/wp-content/uploads/2024/10/banner-principal-SR.webp')] bg-cover bg-center opacity-0 animate-slide-2"></div>
-      <div className="absolute inset-0 bg-[url('https://luxcity.com/storage/photos/7/blogs/seafood-restaurant-phnom-penh-4.jpg')] bg-cover bg-center opacity-0 animate-slide-3"></div>
+      {heroSlides.slice(0, 3).map((slide, index) => (
+        <div
+          key={slide.id}
+          className={`absolute inset-0 ${index ? "opacity-0" : ""} ${slideAnimations[index]}`}
+        >
+          <Image
+            src={slide.image?.url || "/image/placeholder.jpg"}
+            alt={slide.image?.alternativeText || slide.title}
+            fill
+            priority={index === 0}
+            className="object-cover"
+            sizes="100vw"
+          />
+        </div>
+      ))}
 
       {/* Overlay - Responsive */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/60 to-slate-950/95 z-10"></div>

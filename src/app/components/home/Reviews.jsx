@@ -2,7 +2,6 @@
 
 import { useMemo, useState, useEffect } from "react";
 import ReviewDrawer from "./ReviewDrawer";
-import { initialReviews } from "@/app/data/reviews";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useResortContent } from "@/app/components/providers/ResortContentProvider";
@@ -26,6 +25,7 @@ export default function Reviews() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reviewError, setReviewError] = useState("");
 
+  // Fetch reviews on load
   useEffect(() => {
     if (!isLoaded) return;
     let active = true;
@@ -39,8 +39,8 @@ export default function Reviews() {
         }
       } catch (error) {
         if (active) {
-          setReviews(initialReviews);
-          setReviewError(`${error.message} Showing the preserved review copy.`);
+          setReviews([]);
+          setReviewError(error.message);
         }
       }
     })();
@@ -58,6 +58,7 @@ export default function Reviews() {
     [reviews, totalReviews],
   );
 
+  // Add or update review
   const addReview = async (newReview) => {
     setIsSubmitting(true);
     setReviewError("");
@@ -96,6 +97,7 @@ export default function Reviews() {
     }
   };
 
+  // Open review drawer or redirect to sign-in
   const openReviewDrawer = (review = null) => {
     if (!isSignedIn) {
       router.push(`/sign-in?redirect_url=${encodeURIComponent("/#reviews")}`);
@@ -106,6 +108,7 @@ export default function Reviews() {
     setIsDrawerOpen(true);
   };
 
+  // Delete review
   const handleDelete = async (review) => {
     if (!window.confirm("Delete this review? This cannot be undone.")) return;
     setReviewError("");
@@ -120,6 +123,7 @@ export default function Reviews() {
     }
   };
 
+  // Sort reviews based on selected option
   const getSortedReviews = () => {
     const sorted = [...reviews];
     switch (sortBy) {
@@ -140,6 +144,7 @@ export default function Reviews() {
     }
   };
 
+  // Handle like toggle
   const handleLike = (reviewId) => {
     setReviews(
       reviews.map((review) =>
@@ -156,10 +161,12 @@ export default function Reviews() {
     );
   };
 
+  // Generate star display
   const getStarDisplay = (rating) => {
     return "★".repeat(rating) + "☆".repeat(5 - rating);
   };
 
+  // Get avatar color based on name - handle undefined names
   const getAvatarColor = (name) => {
     const colors = [
       "bg-resortGreen/10 dark:bg-resortGreen/30 text-resortGreen",
@@ -169,13 +176,26 @@ export default function Reviews() {
       "bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400",
       "bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400",
     ];
+    
+    // Return default color if name is invalid
+    if (!name || typeof name !== 'string' || name.trim() === '') {
+      return colors[0];
+    }
+    
     const index = name.length % colors.length;
     return colors[index];
   };
 
+  // Filter out reviews without valid names
+  const getFilteredReviews = () => {
+    const sorted = getSortedReviews();
+    return sorted.filter(review => review && review.name);
+  };
+
+  // Determine which reviews to display
   const displayedReviews = showAllReviews
-    ? getSortedReviews()
-    : getSortedReviews().slice(0, 3);
+    ? getFilteredReviews()
+    : getFilteredReviews().slice(0, 3);
 
   const toggleShowAll = () => {
     setShowAllReviews(!showAllReviews);
@@ -254,117 +274,123 @@ export default function Reviews() {
             </div>
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
-            {displayedReviews.map((review) => (
-              <div
-                key={review.id}
-                className="group relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-resortGreen/5 transition-all duration-500 hover:-translate-y-2"
-              >
-                {/* ❌ Green Accent Line REMOVED */}
-
-                <div className="space-y-4">
-                  {/* User Profile Header */}
-                  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60 pb-4">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${getAvatarColor(review.name)}`}
-                      >
-                        {review.name.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-slate-900 dark:text-white text-sm">
-                          {review.name}
-                        </h4>
-                        <div className="flex items-center gap-1.5">
-                          {review.verified && (
-                            <span className="inline-flex items-center gap-1 text-[8px] font-bold text-resortGreen">
-                              <i className="fa-solid fa-check-circle"></i>
-                              Verified
-                            </span>
-                          )}
-                          <span className="text-[8px] text-slate-400">•</span>
-                          <p className="text-[8px] text-slate-400 font-medium uppercase tracking-wide">
-                            {review.date}
-                          </p>
-                          {review.roomType && (
-                            <>
-                              <span className="text-[8px] text-slate-400">
-                                •
+            {displayedReviews.length === 0 ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-slate-500 dark:text-slate-400 text-sm">
+                  No reviews yet. Be the first to share your experience!
+                </p>
+              </div>
+            ) : (
+              displayedReviews.map((review) => (
+                <div
+                  key={review.id}
+                  className="group relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-resortGreen/5 transition-all duration-500 hover:-translate-y-2"
+                >
+                  <div className="space-y-4">
+                    {/* User Profile Header */}
+                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60 pb-4">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${getAvatarColor(review.name)}`}
+                        >
+                          {review.name ? review.name.charAt(0).toUpperCase() : "?"}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-slate-900 dark:text-white text-sm">
+                            {review.name || "Anonymous Guest"}
+                          </h4>
+                          <div className="flex items-center gap-1.5">
+                            {review.verified && (
+                              <span className="inline-flex items-center gap-1 text-[8px] font-bold text-resortGreen">
+                                <i className="fa-solid fa-check-circle"></i>
+                                Verified
                               </span>
-                              <p className="text-[8px] text-slate-400 font-medium">
-                                {review.roomType}
-                              </p>
-                            </>
-                          )}
+                            )}
+                            <span className="text-[8px] text-slate-400">•</span>
+                            <p className="text-[8px] text-slate-400 font-medium uppercase tracking-wide">
+                              {review.date || "Recent Stay"}
+                            </p>
+                            {review.roomType && (
+                              <>
+                                <span className="text-[8px] text-slate-400">
+                                  •
+                                </span>
+                                <p className="text-[8px] text-slate-400 font-medium">
+                                  {review.roomType}
+                                </p>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
+                      <div className="flex text-amber-400 text-[9px] gap-0.5">
+                        {[...Array(5)].map((_, i) => (
+                          <i
+                            key={i}
+                            className={`fa-solid fa-star ${i < review.rating ? "text-amber-400" : "text-slate-200 dark:text-slate-700"}`}
+                          ></i>
+                        ))}
+                      </div>
                     </div>
-                    <div className="flex text-amber-400 text-[9px] gap-0.5">
-                      {[...Array(5)].map((_, i) => (
-                        <i
-                          key={i}
-                          className={`fa-solid fa-star ${i < review.rating ? "text-amber-400" : "text-slate-200 dark:text-slate-700"}`}
-                        ></i>
-                      ))}
-                    </div>
+
+                    <p className="text-slate-600 dark:text-slate-300 font-normal text-xs leading-relaxed font-serif italic">
+                      “ {review.comment || "No comment provided"} ”
+                    </p>
+
+                    {review.adminReply && (
+                      <div className="mt-3 p-3 bg-resortGreen/5 dark:bg-resortGreen/10 rounded-xl border border-resortGreen/10">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[8px] font-bold text-resortGreen uppercase tracking-wider">
+                            Management Response
+                          </span>
+                          <span className="text-[8px] text-slate-400">
+                            {review.adminReply.date}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                          {review.adminReply.reply}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
-                  <p className="text-slate-600 dark:text-slate-300 font-normal text-xs leading-relaxed font-serif italic">
-                    “ {review.comment} ”
-                  </p>
-
-                  {review.adminReply && (
-                    <div className="mt-3 p-3 bg-resortGreen/5 dark:bg-resortGreen/10 rounded-xl border border-resortGreen/10">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[8px] font-bold text-resortGreen uppercase tracking-wider">
-                          Management Response
-                        </span>
-                        <span className="text-[8px] text-slate-400">
-                          {review.adminReply.date}
-                        </span>
-                      </div>
-                      <p className="text-[10px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                        {review.adminReply.reply}
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Heart Toggle */}
-                <div className="flex items-center gap-4 pt-4 border-t border-slate-100 dark:border-slate-800/60 mt-4">
-                  <button
-                    onClick={() => handleLike(review.id)}
-                    className="flex items-center gap-1.5 text-[10px] transition-colors cursor-pointer group/like"
-                  >
-                    {review.liked ? (
-                      <i className="fa-solid fa-heart text-rose-500 hover:text-rose-600 transition-all"></i>
-                    ) : (
-                      <i className="fa-regular fa-heart text-slate-400 group-hover/like:text-rose-400 transition-all"></i>
-                    )}
-                    <span
-                      className={`font-medium ${review.liked ? "text-rose-500" : "text-slate-400"}`}
+                  {/* Heart Toggle */}
+                  <div className="flex items-center gap-4 pt-4 border-t border-slate-100 dark:border-slate-800/60 mt-4">
+                    <button
+                      onClick={() => handleLike(review.id)}
+                      className="flex items-center gap-1.5 text-[10px] transition-colors cursor-pointer group/like"
                     >
-                      {review.likes || 0}
-                    </span>
-                  </button>
-                  {review.isOwner && (
-                    <div className="ml-auto flex items-center gap-3">
-                      <button
-                        onClick={() => openReviewDrawer(review)}
-                        className="text-[10px] font-semibold text-slate-400 transition-colors hover:text-resortGreen"
+                      {review.liked ? (
+                        <i className="fa-solid fa-heart text-rose-500 hover:text-rose-600 transition-all"></i>
+                      ) : (
+                        <i className="fa-regular fa-heart text-slate-400 group-hover/like:text-rose-400 transition-all"></i>
+                      )}
+                      <span
+                        className={`font-medium ${review.liked ? "text-rose-500" : "text-slate-400"}`}
                       >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(review)}
-                        className="text-[10px] font-semibold text-slate-400 transition-colors hover:text-rose-500"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  )}
+                        {review.likes || 0}
+                      </span>
+                    </button>
+                    {review.isOwner && (
+                      <div className="ml-auto flex items-center gap-3">
+                        <button
+                          onClick={() => openReviewDrawer(review)}
+                          className="text-[10px] font-semibold text-slate-400 transition-colors hover:text-resortGreen"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(review)}
+                          className="text-[10px] font-semibold text-slate-400 transition-colors hover:text-rose-500"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* View All / Show Less Reviews Link */}

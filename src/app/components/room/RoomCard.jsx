@@ -32,8 +32,8 @@ export default function RoomCard({ room, viewMode = "grid" }) {
         }`}
       >
         <Image
-          src={room.images?.[0] || "/image/placeholder.jpg"}
-          alt={room.title || "Room"}
+          src={room.images?.[0]?.url || "/image/placeholder.jpg"}
+          alt={room.images?.[0]?.alternativeText || room.title || "Room"}
           width={600}
           height={400}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

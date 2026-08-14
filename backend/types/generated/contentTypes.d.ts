@@ -600,6 +600,42 @@ export interface ApiGalleryItemGalleryItem extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiHeroSlideHeroSlide extends Struct.CollectionTypeSchema {
+  collectionName: 'hero_slides';
+  info: {
+    description: 'Home page hero carousel image';
+    displayName: 'Hero Slide';
+    pluralName: 'hero-slides';
+    singularName: 'hero-slide';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images'>;
+    legacyId: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::hero-slide.hero-slide'
+    > &
+      Schema.Attribute.Private;
+    placement: Schema.Attribute.Enumeration<['home', 'rooms', 'restaurant']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'home'>;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiMenuItemMenuItem extends Struct.CollectionTypeSchema {
   collectionName: 'menu_items';
   info: {
@@ -644,6 +680,40 @@ export interface ApiMenuItemMenuItem extends Struct.CollectionTypeSchema {
       'api::table-booking.table-booking'
     >;
     time: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiRestaurantGalleryItemRestaurantGalleryItem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'restaurant_gallery_items';
+  info: {
+    description: 'Restaurant gallery image displayed by the Next.js site';
+    displayName: 'Restaurant Gallery Item';
+    pluralName: 'restaurant-gallery-items';
+    singularName: 'restaurant-gallery-item';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images'>;
+    legacyId: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::restaurant-gallery-item.restaurant-gallery-item'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1521,7 +1591,9 @@ declare module '@strapi/strapi' {
       'api::activity-booking.activity-booking': ApiActivityBookingActivityBooking;
       'api::activity.activity': ApiActivityActivity;
       'api::gallery-item.gallery-item': ApiGalleryItemGalleryItem;
+      'api::hero-slide.hero-slide': ApiHeroSlideHeroSlide;
       'api::menu-item.menu-item': ApiMenuItemMenuItem;
+      'api::restaurant-gallery-item.restaurant-gallery-item': ApiRestaurantGalleryItemRestaurantGalleryItem;
       'api::review.review': ApiReviewReview;
       'api::room-booking.room-booking': ApiRoomBookingRoomBooking;
       'api::room.room': ApiRoomRoom;

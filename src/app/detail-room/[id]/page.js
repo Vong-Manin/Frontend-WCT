@@ -74,8 +74,8 @@ export default function RoomDetailPage() {
       {/* Hero Section - Taller for better overlap effect */}
       <div className="relative h-[45vh] sm:h-[55vh] lg:h-[70vh] overflow-hidden mt-2 sm:mt-3">
         <Image
-          src={room.images?.[0] || "/image/placeholder.jpg"}
-          alt={room.title}
+          src={room.images?.[0]?.url || "/image/placeholder.jpg"}
+          alt={room.images?.[0]?.alternativeText || room.title}
           fill
           className="object-cover"
           priority
@@ -189,8 +189,8 @@ export default function RoomDetailPage() {
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
-                    src={similarRoom.images?.[0] || "/image/placeholder.jpg"}
-                    alt={similarRoom.title}
+                    src={similarRoom.images?.[0]?.url || "/image/placeholder.jpg"}
+                    alt={similarRoom.images?.[0]?.alternativeText || similarRoom.title}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />

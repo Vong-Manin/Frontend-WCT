@@ -53,7 +53,7 @@ export default function ActivityCard({
   };
 
   // Safe fallback values
-  const imageUrl = activity.image || "/image/placeholder.jpg";
+  const imageUrl = activity.image?.url || "/image/placeholder.jpg";
   const heading = activity.heading || "Activity";
   const title = activity.title || "Experience";
   const description = activity.description || "No description available.";
@@ -73,7 +73,7 @@ export default function ActivityCard({
       <div className="relative aspect-[4/3] overflow-hidden flex-shrink-0">
         <Image
           src={imageUrl}
-          alt={heading}
+          alt={activity.image?.alternativeText || heading}
           fill
           loading={isPriority ? "eager" : "lazy"}
           fetchPriority={isPriority ? "high" : "auto"}
@@ -82,9 +82,6 @@ export default function ActivityCard({
             isHovered ? "scale-110" : "scale-100"
           }`}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          onError={(e) => {
-            e.currentTarget.src = "/image/placeholder.jpg";
-          }}
         />
 
         {/* Gradient Overlay */}

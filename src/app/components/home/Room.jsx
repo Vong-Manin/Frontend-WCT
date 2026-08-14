@@ -55,8 +55,8 @@ export default function Rooms() {
                   <Link href={`/detail-room/${room.id}`}>
                     <div className="overflow-hidden aspect-[4/3] cursor-pointer">
                       <Image
-                        src={room.images[0]}
-                        alt={room.title}
+                        src={room.images?.[0]?.url || "/image/placeholder.jpg"}
+                        alt={room.images?.[0]?.alternativeText || room.title}
                         width={600}
                         height={400}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

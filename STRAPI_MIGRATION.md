@@ -1,11 +1,11 @@
 # Strapi migration and operations guide
 
-The Next.js site now uses Strapi's REST API as its primary content source. The original files in `src/app/data/` remain only as a temporary, user-visible outage fallback and as the source for the repeatable seed generator. Do not remove them until the production CMS has been validated.
+The Next.js site uses Strapi's REST API as its only source for resort content. The Next.js route handler fetches Strapi data and returns it to the client-side content provider, so React components never read local content modules or dynamic image paths.
 
 ## Architecture
 
 - Next.js keeps the existing Clerk sign-in and UI.
-- Public room, activity, menu, gallery, and review reads come from Strapi.
+- Public room, activity, menu, home hero, restaurant gallery, and review reads come from Strapi.
 - The browser sends a Clerk session token for review writes and all booking writes.
 - Strapi verifies that token and mirrors its verified `sub` into a private `Site User` record.
 - Review and booking ownership is derived only from that verified identity. Browser-supplied user IDs, prices, totals, and verification flags are ignored.
@@ -66,15 +66,17 @@ Open `http://localhost:1337/admin` to create the first Strapi administrator. The
 
 ## Content and media import
 
-`npm run seed:cms` first regenerates `backend/src/seed/data.json` from the preserved local modules, then idempotently upserts:
+`npm run seed:cms` reads the canonical `backend/src/seed/data.json` manifest, then idempotently upserts:
 
 - 12 rooms and their image galleries
 - 12 activities and their images
 - 9 restaurant menu items and operating hours
 - 4 gallery entries and images
+- 5 page hero images (home carousel, rooms, and restaurant)
+- 8 restaurant gallery entries and images
 - 6 historical reviews, linked to matching rooms where possible
 
-The import uses each item's legacy numeric ID, so it can be run repeatedly. Existing media is not uploaded twice. Historical reviews intentionally have no owner and therefore cannot be claimed, edited, or deleted by a browser user.
+The import uses each item's legacy numeric ID, so it can be run repeatedly. Existing complete media is not uploaded twice. Historical reviews intentionally have no owner and therefore cannot be claimed, edited, or deleted by a browser user.
 
 After production content has been verified, future edits should be made in Strapi Admin. Leave `AUTO_SEED=false` if local seed data should no longer overwrite editorial field changes during restarts.
 
@@ -87,6 +89,8 @@ GET /api/rooms?populate[images]=true
 GET /api/activities?populate[image]=true
 GET /api/menu-items?populate[image]=true
 GET /api/gallery-items?populate[image]=true
+GET /api/hero-slides?populate[image]=true
+GET /api/restaurant-gallery-items?populate[image]=true
 GET /api/reviews
 GET /api/reviews/:documentId
 ```
@@ -131,7 +135,7 @@ Deploy Strapi before Next.js so the public CMS URL is available during frontend 
 4. Use durable media storage. The local upload provider is suitable for development only when the host filesystem is ephemeral; configure a Strapi S3-compatible upload provider or a persistent volume for production.
 5. Run `npm --prefix backend run seed` once against the production database, or enable `AUTO_SEED=true` for the first boot and disable it after validation.
 6. Build and start Strapi with `npm --prefix backend run build` and `npm --prefix backend run start`.
-7. Set `NEXT_PUBLIC_STRAPI_URL=https://cms.example.com` in the Next.js deployment, add that exact media hostname to `images.remotePatterns` in `next.config.mjs`, then run `npm run build` and `npm start`.
+7. Set `NEXT_PUBLIC_STRAPI_URL=https://cms.example.com` in the Next.js deployment. `next.config.mjs` derives its allowed `/uploads/**` media host from that value. Then run `npm run build` and `npm start`.
 8. Verify public reads, all three booking forms, review CRUD, media URLs, CORS, and the two-user ownership procedure before removing any fallback data.
 
 The local-IP image optimization exception in `next.config.mjs` enables itself only when `NEXT_PUBLIC_STRAPI_URL` is `localhost` or `127.0.0.1`; it stays disabled for a production CMS domain.

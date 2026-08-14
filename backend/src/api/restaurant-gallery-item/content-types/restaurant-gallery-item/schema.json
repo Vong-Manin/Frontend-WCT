@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "restaurant_gallery_items",
+  "info": {
+    "singularName": "restaurant-gallery-item",
+    "pluralName": "restaurant-gallery-items",
+    "displayName": "Restaurant Gallery Item",
+    "description": "Restaurant gallery image displayed by the Next.js site"
+  },
+  "options": { "draftAndPublish": false },
+  "attributes": {
+    "legacyId": { "type": "integer", "required": true, "unique": true },
+    "title": { "type": "string", "required": true },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

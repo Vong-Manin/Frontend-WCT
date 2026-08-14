@@ -119,8 +119,8 @@ export default function BookingRoom({
                     {/* Room Image */}
                     <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-slate-800">
                       <Image
-                        src={item.room.images?.[0] || "/image/placeholder.jpg"}
-                        alt={item.room.title}
+                        src={item.room.images?.[0]?.url || "/image/placeholder.jpg"}
+                        alt={item.room.images?.[0]?.alternativeText || item.room.title}
                         fill
                         className="object-cover"
                         sizes="(max-width: 640px) 80px, 80px"
