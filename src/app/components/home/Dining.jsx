@@ -72,10 +72,8 @@ export default function Dining() {
               key={item.id}
               className="group relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-resortGreen/20 transition-all duration-500 transform hover:-translate-y-2 sm:hover:-translate-y-3 border border-slate-100/30 dark:border-slate-800/50 flex flex-col"
             >
-              {/* Green Accent Line */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-resortGreen transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
 
-              {/* Type Badge */}
               <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-10 bg-resortGreen/90 backdrop-blur-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-lg border border-resortGreen/30 flex items-center gap-1 sm:gap-1.5">
                 {item.id === 1 && (
                   <>

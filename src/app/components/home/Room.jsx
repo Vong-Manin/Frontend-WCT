@@ -7,7 +7,7 @@ import { useResortContent } from "@/app/components/providers/ResortContentProvid
 
 export default function Rooms() {
   const { rooms } = useResortContent();
-  // ✅ Only show first 3 rooms (one full row)
+  //  Only show first 3 rooms (one full row)
   const displayedRooms = rooms.slice(0, 3);
 
   return (
@@ -41,7 +41,7 @@ export default function Rooms() {
             </div>
           </div>
 
-          {/* ✅ Exactly 3 cards - one row */}
+          {/* Exactly 3 cards - one row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {displayedRooms.map((room) => (
               <div
@@ -75,7 +75,7 @@ export default function Rooms() {
                   </Link>
 
                   <div className="p-4 sm:p-5 lg:p-6 space-y-2 sm:space-y-3">
-                    {/* ✅ Title - Clickable to detail page */}
+                    {/* Title - Clickable to detail page */}
                     <Link href={`/detail-room/${room.id}`}>
                       <h3 className="text-base sm:text-lg lg:text-xl font-serif text-slate-900 dark:text-white hover:text-resortGreen transition-colors cursor-pointer">
                         {room.title}
@@ -91,7 +91,7 @@ export default function Rooms() {
                       </span>
                     </div>
 
-                    {/* ✅ "Book Now" button moves to Booking page */}
+                    {/* "Book Now" button moves to Booking page */}
                     <Link
                       href={`/booking?room=${room.id}`}
                       className="w-full py-2.5 sm:py-3 bg-resortGreen hover:bg-resortGreen-dark text-white rounded-full text-xs sm:text-sm font-medium transition-all shadow-lg hover:shadow-resortGreen/30 flex items-center justify-center gap-2 group/btn block text-center"

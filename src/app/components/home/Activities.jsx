@@ -91,7 +91,6 @@ export default function Activities() {
                     {activity.description}
                   </p>
 
-                  {/* Activity details - Category tag removed */}
                   <div className="flex items-center gap-3 text-xs text-slate-500">
                     <span>⏱️ {activity.duration || "2-3 hours"}</span>
                     <span>👤 Up to {activity.guests || 10}</span>
